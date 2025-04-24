@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "356188148934",
+    "project_id": "muliti-b318f",
+    "storage_bucket": "muliti-b318f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356188148934:android:5a68af81d2e3f7383bf3c7",
+        "android_client_info": {
+          "package_name": "com.example.gam3ya"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8tFICcJqZILytgePGIoLWad-Uuin2gHc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
