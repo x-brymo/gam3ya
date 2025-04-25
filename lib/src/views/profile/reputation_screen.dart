@@ -68,12 +68,6 @@ class _ReputationScreenState extends ConsumerState<ReputationScreen> with Single
       ),
       body: userAsyncValue.when(
         data: (user) {
-          if (user == null) {
-            return const Center(
-              child: Text('لم يتم تسجيل الدخول'),
-            );
-          }
-          
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(

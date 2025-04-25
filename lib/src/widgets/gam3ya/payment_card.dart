@@ -1,10 +1,10 @@
 // widgets/gam3ya/payment_card.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:gam3ya/src/models/gam3ya_model.dart';
 import 'package:intl/intl.dart';
 
 import '../../constants/theme.dart';
+import '../../models/payment_model.dart';
 
 class PaymentCard extends StatelessWidget {
   final Gam3yaPayment payment;
@@ -102,10 +102,10 @@ class PaymentCard extends StatelessWidget {
                   _buildVerifyButton(context),
               ],
             ),
-            if (payment.receiptUrl != null) ...[
-              const SizedBox(height: 12),
-              _buildReceiptButton(context),
-            ],
+            ...[
+            const SizedBox(height: 12),
+            _buildReceiptButton(context),
+          ],
           ],
         ),
       ),

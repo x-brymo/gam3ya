@@ -2,32 +2,12 @@
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
+import 'enum_models.dart';
+import 'payment_model.dart';
+
 part 'gam3ya_model.g.dart';
 
-enum Gam3yaStatus {
-  pending,
-  active,
-  completed,
-  rejected,
-  cancelled
-}
 
-enum Gam3yaDuration {
-  monthly,
-  quarterly,
-  yearly
-}
-
-enum Gam3yaSize {
-  small,
-  medium,
-  large
-}
-
-enum Gam3yaAccess {
-  public,
-  private
-}
 
 @HiveType(typeId: 1)
 class Gam3ya {
@@ -290,72 +270,3 @@ class Gam3yaMember {
   }
 }
 
-@HiveType(typeId: 3)
-class Gam3yaPayment {
-  @HiveField(0)
-  final String id;
-
-  @HiveField(1)
-  final String userId;
-
-  @HiveField(2)
-  final double amount;
-
-  @HiveField(3)
-  final DateTime paymentDate;
-
-  @HiveField(4)
-  final int cycleNumber;
-
-  @HiveField(5)
-  final String? verificationCode;
-
-  @HiveField(6)
-  final bool isVerified;
-
-  @HiveField(7)
-  final String paymentMethod;
-
-  @HiveField(8)
-  final String? receiptUrl;
-
-  Gam3yaPayment({
-    required this.id,
-    required this.userId,
-    required this.amount,
-    required this.paymentDate,
-    required this.cycleNumber,
-    this.verificationCode,
-    this.isVerified = false,
-    required this.paymentMethod,
-    this.receiptUrl,
-  });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'userId': userId,
-      'amount': amount,
-      'paymentDate': paymentDate.toIso8601String(),
-      'cycleNumber': cycleNumber,
-      'verificationCode': verificationCode,
-      'isVerified': isVerified,
-      'paymentMethod': paymentMethod,
-      'receiptUrl': receiptUrl,
-    };
-  }
-
-  factory Gam3yaPayment.fromJson(Map<String, dynamic> json) {
-    return Gam3yaPayment(
-      id: json['id'],
-      userId: json['userId'],
-      amount: json['amount'],
-      paymentDate: DateTime.parse(json['paymentDate']),
-      cycleNumber: json['cycleNumber'],
-      verificationCode: json['verificationCode'],
-      isVerified: json['isVerified'] ?? false,
-      paymentMethod: json['paymentMethod'],
-      receiptUrl: json['receiptUrl'],
-    );
-  }
-}

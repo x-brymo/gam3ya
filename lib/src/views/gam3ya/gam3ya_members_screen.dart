@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 
 // import '../../controllers/auth_provider.dart';
 import '../../controllers/user_provider.dart';
+import '../../models/enum_models.dart';
 
 class Gam3yaMembersScreen extends ConsumerStatefulWidget {
   const Gam3yaMembersScreen({super.key});
@@ -63,7 +64,7 @@ actions: [
   ...gam3yaAsyncValue.whenOrNull(
     data: (gam3ya) => currentUserAsyncValue.whenOrNull(
       data: (currentUser) {
-        if (currentUser!.id == gam3ya!.creatorId || 
+        if (currentUser.id == gam3ya!.creatorId || 
             currentUser.role == UserRole.admin || 
             currentUser.role == UserRole.moderator) {
           return [

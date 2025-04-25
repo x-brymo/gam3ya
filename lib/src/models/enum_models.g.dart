@@ -6,6 +6,49 @@ part of 'enum_models.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
+class UserStateLifeAdapter extends TypeAdapter<UserStateLife> {
+  @override
+  final int typeId = 17;
+
+  @override
+  UserStateLife read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return UserStateLife(
+      reputationScore: fields[1] as String,
+      activeGam3yas: fields[2] as String,
+      monthlyDue: fields[3] as String,
+      expectedIncome: fields[0] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, UserStateLife obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.expectedIncome)
+      ..writeByte(1)
+      ..write(obj.reputationScore)
+      ..writeByte(2)
+      ..write(obj.activeGam3yas)
+      ..writeByte(3)
+      ..write(obj.monthlyDue);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserStateLifeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class UserRoleAdapter extends TypeAdapter<UserRole> {
   @override
   final int typeId = 11;
@@ -232,6 +275,60 @@ class Gam3yaAccessAdapter extends TypeAdapter<Gam3yaAccess> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is Gam3yaAccessAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class UserStatusAdapter extends TypeAdapter<UserStatus> {
+  @override
+  final int typeId = 16;
+
+  @override
+  UserStatus read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return UserStatus.active;
+      case 1:
+        return UserStatus.inactive;
+      case 2:
+        return UserStatus.banned;
+      case 3:
+        return UserStatus.suspended;
+      case 4:
+        return UserStatus.offline;
+      default:
+        return UserStatus.active;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, UserStatus obj) {
+    switch (obj) {
+      case UserStatus.active:
+        writer.writeByte(0);
+        break;
+      case UserStatus.inactive:
+        writer.writeByte(1);
+        break;
+      case UserStatus.banned:
+        writer.writeByte(2);
+        break;
+      case UserStatus.suspended:
+        writer.writeByte(3);
+        break;
+      case UserStatus.offline:
+        writer.writeByte(4);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserStatusAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

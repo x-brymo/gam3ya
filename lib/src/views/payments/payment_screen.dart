@@ -1,3 +1,5 @@
+import 'dart:math';
+
 // payments/payment_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +14,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../controllers/gam3ya_provider.dart';
 import '../../controllers/payment_provider.dart';
+import '../../models/payment_model.dart';
 
 class PaymentScreen extends ConsumerStatefulWidget {
   static const String routeName = '/payment';
@@ -32,6 +35,13 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     'aman',
     'cash',
   ];
+  String getverificationCode() {
+    final random = Random();
+    // Generate a 6-digit random number
+    final verificationCode = random.nextInt(900000) + 100000;
+
+    return verificationCode.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -280,9 +290,8 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
         cycleNumber: cycleNumber,
         paymentMethod: _selectedPaymentMethod,
         isVerified: _selectedPaymentMethod != 'cash', // Only cash payments need verification
-        verificationCode: _selectedPaymentMethod == 'cash' 
-            ? paymentId.substring(0, 6).toUpperCase()
-            : null,
+        verificationCode: _selectedPaymentMethod == 'cash' ? getverificationCode() : '',receiptUrl: '',
+            gam3yaId: gam3ya.id,
       );
       
       // If not cash payment, process it directly

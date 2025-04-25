@@ -8,6 +8,8 @@ import 'package:gam3ya/src/widgets/common/error_widget.dart';
 import 'package:gam3ya/src/widgets/common/loading_indicator.dart';
 import 'package:gam3ya/src/widgets/gam3ya/gam3ya_card.dart';
 
+import '../../models/enum_models.dart';
+
 class Gam3yaListScreen extends ConsumerStatefulWidget {
   const Gam3yaListScreen({super.key});
 

@@ -6,6 +6,7 @@ import 'package:gam3ya/src/models/user_model.dart';
 
 import 'package:gam3ya/src/services/firebase_service.dart';
 
+import '../models/enum_models.dart';
 import 'auth_provider.dart';
 
 final gam3yaServiceProvider = Provider<FirebaseService>((ref) {
@@ -28,10 +29,6 @@ final userGam3yasProvider = FutureProvider<List<Gam3ya>>((ref) async {
   final gam3yaService = ref.watch(gam3yaServiceProvider);
   final currentUser = ref.watch(currentUserProvider.notifier).state;
   
-  if (currentUser == null) {
-    return [];
-  }
-  
   final joinedGam3yasIds = currentUser.joinedGam3yasIds;
   final gam3yas = await Future.wait(
     joinedGam3yasIds.map((id) => gam3yaService.getGam3ya(id)),
@@ -43,10 +40,6 @@ final userGam3yasProvider = FutureProvider<List<Gam3ya>>((ref) async {
 final createdGam3yasProvider = FutureProvider<List<Gam3ya>>((ref) async {
   final gam3yaService = ref.watch(gam3yaServiceProvider);
   final currentUser = ref.watch(currentUserProvider.notifier).state;
-  
-  if (currentUser == null) {
-    return [];
-  }
   
   final List<Gam3ya> allGam3yas = await gam3yaService.getAllGam3yas();
   return allGam3yas.where((gam3ya) => gam3ya.creatorId == currentUser.id).toList();
@@ -98,7 +91,7 @@ final singleGam3yaProvider = FutureProvider.family<Gam3ya?, String>((ref, gam3ya
 final userNextPaymentProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   final currentUser = ref.watch(currentUserProvider.notifier).state;
   final gam3yaService = ref.watch(gam3yaServiceProvider);
-  if (currentUser == null || currentUser.joinedGam3yasIds.isEmpty) {
+  if (currentUser.joinedGam3yasIds.isEmpty) {
     return {'hasPayment': false};
   }
   
@@ -162,8 +155,7 @@ final FirebaseService gam3yaServiceProviders = FirebaseService();
   //   state = state.where((g) => g.id != gam3yaId).toList();
   // }
   Future<void> fetchUserGam3yas(String id) async {
-    final currentUser = await gam3yaServiceProviders.getUserProfile(id); // current user
-    if (currentUser == null) return;
+    final currentUser = await gam3yaServiceProviders.getUserProfile(id);
     
     final joinedGam3yasIds = currentUser.joinedGam3yasIds;
     final gam3yas = await Future.wait(
@@ -173,8 +165,7 @@ final FirebaseService gam3yaServiceProviders = FirebaseService();
     state = gam3yas.whereType<Gam3ya>().toList();
   }
   Future<void> fetchCreatedGam3yas(String id) async {
-    final currentUser = await gam3yaServiceProviders.getUserProfile(id); // current user
-    if (currentUser == null) return;
+    final currentUser = await gam3yaServiceProviders.getUserProfile(id);
     
     final List<Gam3ya> allGam3yas = await gam3yaServiceProviders.getAllGam3yas();
     state = allGam3yas.where((gam3ya) => gam3ya.creatorId == currentUser.id).toList();

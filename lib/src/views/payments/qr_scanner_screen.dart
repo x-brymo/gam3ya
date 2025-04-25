@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gam3ya/src/controllers/payment_provider.dart';
-import 'package:gam3ya/src/models/payment_model.dart';
 import 'package:gam3ya/src/services/notification_service.dart';
 import 'package:gam3ya/src/widgets/animations/slide_animation.dart';
 import 'package:gam3ya/src/widgets/common/error_widget.dart';

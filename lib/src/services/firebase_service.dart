@@ -1,9 +1,13 @@
 // services/firebase_service.dart
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:gam3ya/src/models/gam3ya_model.dart';
 import 'package:gam3ya/src/models/user_model.dart' as app_user;
 
+import '../models/enum_models.dart';
+import '../models/payment_model.dart';
 import 'upload_image_service.dart';
 
 class FirebaseService {
@@ -100,7 +104,7 @@ class FirebaseService {
     }
   } 
 
-  Future<app_user.User?> getUserProfile(String userId) async {
+  Future<app_user.User> getUserProfile(String userId) async {
     try {
       final docSnapshot = await _firestore.collection('users').doc(userId).get();
       if (docSnapshot.exists) {
@@ -109,7 +113,8 @@ class FirebaseService {
           ...docSnapshot.data()!,
         });
       }
-      return null;
+       
+      return app_user.User.fromJson(json.decode(jsonEncode(docSnapshot.data())));
     } catch (e) {
       print('Error fetching user profile: $e');
       rethrow;
@@ -297,7 +302,7 @@ class FirebaseService {
         })
         .snapshots()
         .map((snapshot) {
-          return snapshot.docs.map((doc) => Gam3yaPayment.fromJson({
+          return snapshot.docs.map((doc) => Gam3yaPayment.fromMap({
             'id': doc.id,
             ...doc.data(),
           })).toList();
@@ -320,7 +325,7 @@ class FirebaseService {
   Future<List<Gam3yaPayment>> getAllPayments() async {
     try {
       final querySnapshot = await _firestore.collection('gam3yas').get();
-      return querySnapshot.docs.map((doc) => Gam3yaPayment.fromJson({
+      return querySnapshot.docs.map((doc) => Gam3yaPayment.fromMap({
         'id': doc.id,
         ...doc.data(),
       })).toList();
@@ -333,7 +338,7 @@ class FirebaseService {
   // need create createpayment
   Future<void> createPayment(Gam3yaPayment payment) async {
     try {
-      await _firestore.collection('payments').doc(payment.id).set(payment.toJson());
+      await _firestore.collection('payments').doc(payment.id).set(payment.toMap());
     } catch (e) {
       print('Error creating payment: $e');
       rethrow;
@@ -344,7 +349,7 @@ class FirebaseService {
     try {
       final docSnapshot = await _firestore.collection('payments').doc(paymentId).get();
       if (docSnapshot.exists) {
-        return Gam3yaPayment.fromJson({
+        return Gam3yaPayment.fromMap({
           'id': docSnapshot.id,
           ...docSnapshot.data()!,
         });
@@ -359,7 +364,7 @@ class FirebaseService {
   Future<List<Gam3yaPayment>> getAllPaymentsByUserId(String userId) async {
     try {
       final querySnapshot = await _firestore.collection('payments').where('userId', isEqualTo: userId).get();
-      return querySnapshot.docs.map((doc) => Gam3yaPayment.fromJson({
+      return querySnapshot.docs.map((doc) => Gam3yaPayment.fromMap({
         'id': doc.id,
         ...doc.data(),
       })).toList();
@@ -372,7 +377,7 @@ class FirebaseService {
   Future<List<Gam3yaPayment>> getAllPaymentsByGam3yaId(String gam3yaId) async {
     try {
       final querySnapshot = await _firestore.collection('payments').where('gam3yaId', isEqualTo: gam3yaId).get();
-      return querySnapshot.docs.map((doc) => Gam3yaPayment.fromJson({
+      return querySnapshot.docs.map((doc) => Gam3yaPayment.fromMap({
         'id': doc.id,
         ...doc.data(),
       })).toList();

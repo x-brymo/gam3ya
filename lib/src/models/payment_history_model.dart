@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import 'gam3ya_model.dart';
+import 'payment_model.dart';
 
 part 'payment_history_model.g.dart';
 
