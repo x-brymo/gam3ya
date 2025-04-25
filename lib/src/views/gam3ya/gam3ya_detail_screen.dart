@@ -16,8 +16,7 @@ import '../../controllers/gam3ya_provider.dart';
 class Gam3yaDetailScreen extends ConsumerStatefulWidget {
   final String gam3yaId;
 
-  const Gam3yaDetailScreen({Key? key, required this.gam3yaId})
-    : super(key: key);
+  const Gam3yaDetailScreen({super.key, required this.gam3yaId});
 
   @override
   ConsumerState<Gam3yaDetailScreen> createState() => _Gam3yaDetailScreenState();

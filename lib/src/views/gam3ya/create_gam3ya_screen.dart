@@ -13,7 +13,7 @@ import 'package:uuid/uuid.dart';
 import '../../controllers/auth_provider.dart';
 
 class CreateGam3yaScreen extends ConsumerStatefulWidget {
-  const CreateGam3yaScreen({Key? key}) : super(key: key);
+  const CreateGam3yaScreen({super.key});
 
   @override
   ConsumerState<CreateGam3yaScreen> createState() => _CreateGam3yaScreenState();

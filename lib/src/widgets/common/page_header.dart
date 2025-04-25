@@ -11,14 +11,14 @@ class PageHeader extends StatelessWidget {
   final VoidCallback? onBackPressed;
 
   const PageHeader({
-    Key? key,
+    super.key,
     required this.title,
     this.subtitle,
     this.icon,
     this.animate = true,
     this.showBackButton = false,
     this.onBackPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

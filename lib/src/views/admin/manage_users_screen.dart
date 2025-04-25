@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import '../../controllers/user_provider.dart';
 
 class ManageUsersScreen extends ConsumerStatefulWidget {
-  const ManageUsersScreen({Key? key}) : super(key: key);
+  const ManageUsersScreen({super.key});
 
   @override
   ConsumerState<ManageUsersScreen> createState() => _ManageUsersScreenState();

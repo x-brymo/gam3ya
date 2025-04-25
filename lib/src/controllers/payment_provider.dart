@@ -121,10 +121,6 @@ final paymentQRCodeProvider = FutureProvider.family<String?, String>((ref, payme
     ),
   );
   
-  if (payment == null) {
-    throw Exception('Payment not found');
-  }
-  
   return payment.verificationCode;
 });
 final paymentProvider = FutureProvider.family<Gam3yaPayment?, String>((ref, paymentId) async {

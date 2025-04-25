@@ -14,7 +14,7 @@ import 'package:intl/intl.dart';
 import '../../controllers/user_provider.dart';
 
 class Gam3yaMembersScreen extends ConsumerStatefulWidget {
-  const Gam3yaMembersScreen({Key? key}) : super(key: key);
+  const Gam3yaMembersScreen({super.key});
 
   static const routeName = '/gam3ya-members';
 

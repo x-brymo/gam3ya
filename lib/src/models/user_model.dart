@@ -19,7 +19,7 @@ enum UserStatus {
 } 
 
 
-@HiveType(typeId: 5)
+@HiveType(typeId: 9)
 class User {
   @HiveField(0)
   final String id;
@@ -71,7 +71,7 @@ class User {
   }) : assert(
           reputationScore >= 0 && reputationScore <= 100,
           'Reputation score must be between 0 and 100',
-        ) {}
+        );
   
 
   User copyWith({

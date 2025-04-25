@@ -13,20 +13,12 @@ import '../../widgets/common/loading_indicator.dart';
 class PaymentHistoryScreen extends ConsumerWidget {
   static const String routeName = '/payment/history';
 
-  const PaymentHistoryScreen({Key? key}) : super(key: key);
+  const PaymentHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
     final paymentsAsync = ref.watch(userPaymentsProvider);
-    
-    if (user == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
     
     return Scaffold(
       appBar: AppBar(
@@ -284,10 +276,10 @@ class PaymentHistoryScreen extends ConsumerWidget {
               Center(
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Close'),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(200, 50),
                   ),
+                  child: const Text('Close'),
                 ),
               ),
             ],

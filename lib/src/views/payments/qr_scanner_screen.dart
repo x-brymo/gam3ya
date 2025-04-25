@@ -14,9 +14,9 @@ class QRScannerScreen extends ConsumerStatefulWidget {
   final String gam3yaId;
   
   const QRScannerScreen({
-    Key? key,
+    super.key,
     required this.gam3yaId,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<QRScannerScreen> createState() => _QRScannerScreenState();

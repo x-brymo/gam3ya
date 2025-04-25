@@ -8,7 +8,7 @@ part of 'nearby_model.dart';
 
 class NearbyDeviceAdapter extends TypeAdapter<NearbyDevice> {
   @override
-  final int typeId = 2;
+  final int typeId = 4;
 
   @override
   NearbyDevice read(BinaryReader reader) {

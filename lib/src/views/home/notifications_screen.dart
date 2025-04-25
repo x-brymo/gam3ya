@@ -11,7 +11,7 @@ import '../../controllers/notification_provider.dart';
 import '../../models/user_notification.dart';
 
 class NotificationsScreen extends ConsumerWidget {
-  const NotificationsScreen({Key? key}) : super(key: key);
+  const NotificationsScreen({super.key});
 
   void _handleNotificationTap(dynamic payload, BuildContext context) {
     // Example implementation: handle navigation or actions based on payload content
@@ -245,11 +245,9 @@ class NotificationsScreen extends ConsumerWidget {
         isThreeLine: true,
         onTap: () {
           // Handle notification tap based on type and data
-          if (notification != null) {
-            // Navigate to related screen based on notification data
-            _handleNotificationTap(notification, context);
-          }
-        },
+          // Navigate to related screen based on notification data
+          _handleNotificationTap(notification, context);
+                },
       ),
     );
   }

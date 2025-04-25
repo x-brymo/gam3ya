@@ -16,7 +16,7 @@ import '../../controllers/payment_provider.dart';
 class PaymentScreen extends ConsumerStatefulWidget {
   static const String routeName = '/payment';
 
-  const PaymentScreen({Key? key}) : super(key: key);
+  const PaymentScreen({super.key});
 
   @override
   ConsumerState<PaymentScreen> createState() => _PaymentScreenState();
@@ -281,7 +281,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
         paymentMethod: _selectedPaymentMethod,
         isVerified: _selectedPaymentMethod != 'cash', // Only cash payments need verification
         verificationCode: _selectedPaymentMethod == 'cash' 
-            ? '${paymentId.substring(0, 6).toUpperCase()}'
+            ? paymentId.substring(0, 6).toUpperCase()
             : null,
       );
       

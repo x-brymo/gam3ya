@@ -8,7 +8,7 @@ part of 'enum_models.dart';
 
 class UserRoleAdapter extends TypeAdapter<UserRole> {
   @override
-  final int typeId = 7;
+  final int typeId = 11;
 
   @override
   UserRole read(BinaryReader reader) {
@@ -57,7 +57,7 @@ class UserRoleAdapter extends TypeAdapter<UserRole> {
 
 class Gam3yaStatusAdapter extends TypeAdapter<Gam3yaStatus> {
   @override
-  final int typeId = 8;
+  final int typeId = 12;
 
   @override
   Gam3yaStatus read(BinaryReader reader) {
@@ -111,7 +111,7 @@ class Gam3yaStatusAdapter extends TypeAdapter<Gam3yaStatus> {
 
 class Gam3yaDurationAdapter extends TypeAdapter<Gam3yaDuration> {
   @override
-  final int typeId = 9;
+  final int typeId = 13;
 
   @override
   Gam3yaDuration read(BinaryReader reader) {
@@ -155,7 +155,7 @@ class Gam3yaDurationAdapter extends TypeAdapter<Gam3yaDuration> {
 
 class Gam3yaSizeAdapter extends TypeAdapter<Gam3yaSize> {
   @override
-  final int typeId = 10;
+  final int typeId = 14;
 
   @override
   Gam3yaSize read(BinaryReader reader) {
@@ -199,7 +199,7 @@ class Gam3yaSizeAdapter extends TypeAdapter<Gam3yaSize> {
 
 class Gam3yaAccessAdapter extends TypeAdapter<Gam3yaAccess> {
   @override
-  final int typeId = 11;
+  final int typeId = 15;
 
   @override
   Gam3yaAccess read(BinaryReader reader) {

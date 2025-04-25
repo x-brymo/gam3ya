@@ -15,7 +15,7 @@ import 'manage_gam3yas_screen.dart';
 import 'manage_users_screen.dart';
 
 class AdminDashboard extends ConsumerStatefulWidget {
-  const AdminDashboard({Key? key}) : super(key: key);
+  const AdminDashboard({super.key});
 
   @override
   ConsumerState<AdminDashboard> createState() => _AdminDashboardState();

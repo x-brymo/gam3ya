@@ -21,7 +21,10 @@ import 'package:gam3ya/src/views/profile/edit_profile_screen.dart';
 import 'package:gam3ya/src/views/profile/profile_screen.dart';
 import 'package:gam3ya/src/views/profile/reputation_screen.dart';
 
+import '../shared/splash_screen.dart';
+
 class AppRoutes {
+  static const String splash = '/splash';
   static const String login = '/login';
   static const String signup = '/signup';
   static const String forgotPassword = '/forgot-password';
@@ -51,6 +54,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> get routes => {
     // Authentication
     login: (context) =>  LoginScreen(),
+    splash: (context) =>  SplashScreen(),
     signup: (context) => const SignupScreen(),
     forgotPassword: (context) => const ForgotPasswordScreen(),
     

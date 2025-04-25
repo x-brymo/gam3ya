@@ -15,7 +15,7 @@ import '../../controllers/gam3ya_provider.dart';
 import '../../controllers/payment_provider.dart';
 
 class DashboardScreen extends ConsumerWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,7 +39,7 @@ class DashboardScreen extends ConsumerWidget {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                'مرحباً ${user?.name?.split(' ').first ?? 'بك'}',
+                'مرحباً ${user?.name.split(' ').first ?? 'بك'}',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),

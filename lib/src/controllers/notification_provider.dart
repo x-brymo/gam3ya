@@ -45,11 +45,11 @@ final notificationNotifierProvider = StateNotifierProvider<NotificationNotifier,
   }
   void refreshNotifications() {
     if (_currentUser != null) {
-      _ref.read(userNotificationsProvider).asData!.value.forEach((notification) {
+      for (var notification in _ref.read(userNotificationsProvider).asData!.value) {
         if (!notification.isRead) {
           updateUnreadNotificationsCount(state - 1);
           }
-      });
+      }
     }
   }
   // void markNotificationAsRead(String notificationId) {

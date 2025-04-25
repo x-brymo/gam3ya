@@ -10,7 +10,7 @@ import '../../controllers/user_provider.dart'as currentUserProvider;
 import '../../controllers/user_provider.dart';
 
 class ProfileScreen extends ConsumerWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

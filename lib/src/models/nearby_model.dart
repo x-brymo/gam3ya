@@ -1,7 +1,5 @@
 // create class NearbyDevice
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:nearby_connections/nearby_connections.dart';
 
 part 'nearby_model.g.dart';
 
@@ -12,7 +10,7 @@ enum NearbyConnectionState {
   connecting,
   notConnected
 }
-  @HiveType(typeId: 2)
+  @HiveType(typeId: 4)
 class NearbyDevice {
   @HiveField(0)
   final String id;

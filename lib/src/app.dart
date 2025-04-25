@@ -11,7 +11,7 @@ import 'views/home/home_screen.dart';
 
 
 class Gam3yaApp extends ConsumerWidget {
-  const Gam3yaApp({Key? key}) : super(key: key);
+  const Gam3yaApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,8 +32,9 @@ class Gam3yaApp extends ConsumerWidget {
         Locale('ar'), // Arabic
       ],
       routes: AppRoutes.routes,
+      initialRoute: AppRoutes.splash,
       home: authState.when(
-        data: (user) => user != null ? const HomeScreen() : const LoginScreen(),
+        data: (user) => user == null ? const LoginScreen() : const HomeScreen(),
         loading: () => const Scaffold(
           body: Center(
             child: CircularProgressIndicator(),

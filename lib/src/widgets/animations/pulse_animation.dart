@@ -10,13 +10,13 @@ class PulseAnimation extends StatelessWidget {
   final double scale;
 
   const PulseAnimation({
-    Key? key,
+    super.key,
     required this.child,
     this.autoPlay = true,
     this.infinite = false,
     this.duration = const Duration(milliseconds: 500),
     this.scale = 1.05,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -10,7 +10,7 @@ enum NotificationType{
   system,
   gam3ya
 }
-@HiveType(typeId: 6)
+@HiveType(typeId: 10)
 class UserNotification {
   @HiveField(0)
   final String id;

@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:hive_flutter/hive_flutter.dart';
 part 'payment_model.g.dart';
-@HiveType(typeId: 4)
+@HiveType(typeId: 8)
 class Gam3yaPayment {
   @HiveField(0)
   final String id;

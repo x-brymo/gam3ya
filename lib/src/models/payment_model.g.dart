@@ -8,7 +8,7 @@ part of 'payment_model.dart';
 
 class Gam3yaPaymentAdapter extends TypeAdapter<Gam3yaPayment> {
   @override
-  final int typeId = 4;
+  final int typeId = 8;
 
   @override
   Gam3yaPayment read(BinaryReader reader) {

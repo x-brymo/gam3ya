@@ -26,7 +26,7 @@ final gam3yasProvider = FutureProvider<List<Gam3ya>>((ref) async {
 
 final userGam3yasProvider = FutureProvider<List<Gam3ya>>((ref) async {
   final gam3yaService = ref.watch(gam3yaServiceProvider);
-  final currentUser = await ref.watch(currentUserProvider.notifier).state;
+  final currentUser = ref.watch(currentUserProvider.notifier).state;
   
   if (currentUser == null) {
     return [];
@@ -42,7 +42,7 @@ final userGam3yasProvider = FutureProvider<List<Gam3ya>>((ref) async {
 
 final createdGam3yasProvider = FutureProvider<List<Gam3ya>>((ref) async {
   final gam3yaService = ref.watch(gam3yaServiceProvider);
-  final currentUser = await ref.watch(currentUserProvider.notifier).state;
+  final currentUser = ref.watch(currentUserProvider.notifier).state;
   
   if (currentUser == null) {
     return [];
@@ -96,7 +96,7 @@ final singleGam3yaProvider = FutureProvider.family<Gam3ya?, String>((ref, gam3ya
 });
 
 final userNextPaymentProvider = FutureProvider<Map<String, dynamic>>((ref) async {
-  final currentUser = await ref.watch(currentUserProvider.notifier).state;
+  final currentUser = ref.watch(currentUserProvider.notifier).state;
   final gam3yaService = ref.watch(gam3yaServiceProvider);
   if (currentUser == null || currentUser.joinedGam3yasIds.isEmpty) {
     return {'hasPayment': false};

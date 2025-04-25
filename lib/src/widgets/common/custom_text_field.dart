@@ -29,7 +29,7 @@ class CustomTextField extends StatelessWidget {
   final TextDirection? textDirection;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     this.labelText,
     this.hintText,
     required this.controller,
@@ -54,7 +54,7 @@ class CustomTextField extends StatelessWidget {
     this.helperText,
     this.showCounter = false,
     this.textDirection,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

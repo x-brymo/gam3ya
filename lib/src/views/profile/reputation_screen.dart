@@ -7,7 +7,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 
 class ReputationScreen extends ConsumerStatefulWidget {
-  const ReputationScreen({Key? key}) : super(key: key);
+  const ReputationScreen({super.key});
 
   @override
   ConsumerState<ReputationScreen> createState() => _ReputationScreenState();

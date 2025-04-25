@@ -15,7 +15,7 @@ class CustomButton extends StatelessWidget {
   final bool animate;
 
   const CustomButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.onPressed,
     this.backgroundColor,
@@ -26,7 +26,7 @@ class CustomButton extends StatelessWidget {
     this.width,
     this.height = 50,
     this.animate = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

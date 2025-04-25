@@ -2,7 +2,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:gam3ya/src/models/gam3ya_model.dart';
-import 'package:gam3ya/src/models/user_model.dart';
 import 'package:gam3ya/src/services/notification_service.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';

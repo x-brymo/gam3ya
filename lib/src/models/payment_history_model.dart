@@ -21,7 +21,7 @@ part 'payment_history_model.g.dart';
 //   penalty       // Late payment penalty
 // }
 
-@HiveType(typeId: 3)
+@HiveType(typeId: 5)
 class PaymentHistoryItem {
   @HiveField(0)
   final String id;
@@ -174,7 +174,7 @@ class PaymentHistoryItem {
   }
 }
 
-@HiveType(typeId: 10)
+@HiveType(typeId: 6)
 enum PaymentStatus {
   @HiveField(0)
   pending,
@@ -192,7 +192,7 @@ enum PaymentStatus {
   late
 }
 
-@HiveType(typeId: 11)
+@HiveType(typeId: 7)
 enum PaymentType {
   @HiveField(0)
   contribution,

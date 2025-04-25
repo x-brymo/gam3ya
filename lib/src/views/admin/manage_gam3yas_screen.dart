@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import '../../controllers/gam3ya_provider.dart';
 
 class ManageGam3yasScreen extends ConsumerStatefulWidget {
-  const ManageGam3yasScreen({Key? key}) : super(key: key);
+  const ManageGam3yasScreen({super.key});
 
   @override
   ConsumerState<ManageGam3yasScreen> createState() => _ManageGam3yasScreenState();

@@ -1,7 +1,6 @@
 // providers/user_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gam3ya/src/models/user_model.dart';
-import 'package:gam3ya/src/services/auth_service.dart';
 import 'package:gam3ya/src/services/firebase_service.dart';
 
 import '../services/upload_image_service.dart';

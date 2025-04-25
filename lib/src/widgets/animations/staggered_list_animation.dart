@@ -11,14 +11,14 @@ class StaggeredListAnimation extends StatelessWidget {
   final double slideOffset;
 
   const StaggeredListAnimation({
-    Key? key,
+    super.key,
     required this.children,
     this.staggerDuration = const Duration(milliseconds: 50),
     this.itemDuration = const Duration(milliseconds: 400),
     this.direction = Axis.vertical,
     this.fadeIn = true,
     this.slideOffset = 50.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

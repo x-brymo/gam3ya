@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 
 part 'enum_models.g.dart';
 
-@HiveType(typeId: 7)
+@HiveType(typeId: 11)
 enum UserRole {
   @HiveField(0)
   user,
@@ -19,7 +19,7 @@ enum UserRole {
   admin,
 }
 
-@HiveType(typeId: 8)
+@HiveType(typeId: 12)
 enum Gam3yaStatus {
   @HiveField(0)
   pending,
@@ -37,7 +37,7 @@ enum Gam3yaStatus {
   cancelled
 }
 
-@HiveType(typeId: 9)
+@HiveType(typeId: 13)
 enum Gam3yaDuration {
   @HiveField(0)
   monthly,
@@ -49,7 +49,7 @@ enum Gam3yaDuration {
   yearly
 }
 
-@HiveType(typeId: 10)
+@HiveType(typeId: 14)
 enum Gam3yaSize {
   @HiveField(0)
   small,
@@ -61,7 +61,7 @@ enum Gam3yaSize {
   large
 }
 
-@HiveType(typeId: 11)
+@HiveType(typeId: 15)
 enum Gam3yaAccess {
   @HiveField(0)
   public,

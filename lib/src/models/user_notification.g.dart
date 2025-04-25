@@ -8,7 +8,7 @@ part of 'user_notification.dart';
 
 class UserNotificationAdapter extends TypeAdapter<UserNotification> {
   @override
-  final int typeId = 6;
+  final int typeId = 10;
 
   @override
   UserNotification read(BinaryReader reader) {

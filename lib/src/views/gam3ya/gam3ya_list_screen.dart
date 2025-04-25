@@ -9,7 +9,7 @@ import 'package:gam3ya/src/widgets/common/loading_indicator.dart';
 import 'package:gam3ya/src/widgets/gam3ya/gam3ya_card.dart';
 
 class Gam3yaListScreen extends ConsumerStatefulWidget {
-  const Gam3yaListScreen({Key? key}) : super(key: key);
+  const Gam3yaListScreen({super.key});
 
   @override
   ConsumerState<Gam3yaListScreen> createState() => _Gam3yaListScreenState();

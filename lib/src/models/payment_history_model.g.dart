@@ -8,7 +8,7 @@ part of 'payment_history_model.dart';
 
 class PaymentHistoryItemAdapter extends TypeAdapter<PaymentHistoryItem> {
   @override
-  final int typeId = 3;
+  final int typeId = 5;
 
   @override
   PaymentHistoryItem read(BinaryReader reader) {
@@ -87,7 +87,7 @@ class PaymentHistoryItemAdapter extends TypeAdapter<PaymentHistoryItem> {
 
 class PaymentStatusAdapter extends TypeAdapter<PaymentStatus> {
   @override
-  final int typeId = 10;
+  final int typeId = 6;
 
   @override
   PaymentStatus read(BinaryReader reader) {
@@ -141,7 +141,7 @@ class PaymentStatusAdapter extends TypeAdapter<PaymentStatus> {
 
 class PaymentTypeAdapter extends TypeAdapter<PaymentType> {
   @override
-  final int typeId = 11;
+  final int typeId = 7;
 
   @override
   PaymentType read(BinaryReader reader) {

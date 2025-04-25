@@ -11,14 +11,14 @@ class FadeAnimation extends StatelessWidget {
   final Offset? offset;
 
   const FadeAnimation({
-    Key? key,
+    super.key,
     required this.child,
     this.duration = const Duration(milliseconds: 500),
     this.delay = Duration.zero,
     this.begin = 0.0,
     this.end = 1.0,
     this.offset,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

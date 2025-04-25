@@ -14,7 +14,7 @@ import '../../controllers/gam3ya_provider.dart';
 import '../../controllers/payment_provider.dart';
 
 class AnalyticsScreen extends ConsumerStatefulWidget {
-  const AnalyticsScreen({Key? key}) : super(key: key);
+  const AnalyticsScreen({super.key});
 
   @override
   ConsumerState<AnalyticsScreen> createState() => _AnalyticsScreenState();

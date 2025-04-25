@@ -12,7 +12,7 @@ class ConfirmationDialog extends StatelessWidget {
   final IconData? icon;
 
   const ConfirmationDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.message,
     this.confirmText = 'تأكيد',
@@ -21,7 +21,7 @@ class ConfirmationDialog extends StatelessWidget {
     this.onCancel,
     this.confirmColor,
     this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

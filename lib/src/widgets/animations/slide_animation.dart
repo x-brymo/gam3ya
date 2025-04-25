@@ -19,7 +19,7 @@ class SlideAnimation extends StatelessWidget {
   final AnimationController? controller;
 
   const SlideAnimation({
-    Key? key,
+    super.key,
     required this.child,
     this.duration = const Duration(milliseconds: 500),
     this.delay = Duration.zero,
@@ -27,7 +27,7 @@ class SlideAnimation extends StatelessWidget {
     this.distance = 50.0,
     this.fade = true,
     this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
