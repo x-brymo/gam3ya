@@ -2,7 +2,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gam3ya/src/controllers/user_provider.dart' show userServiceProvider;
 import 'package:gam3ya/src/models/gam3ya_model.dart';
-import 'package:gam3ya/src/models/user_model.dart';
 
 import 'package:gam3ya/src/services/firebase_service.dart';
 import 'package:uuid/uuid.dart';

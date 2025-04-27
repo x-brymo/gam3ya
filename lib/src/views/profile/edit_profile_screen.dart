@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gam3ya/src/controllers/user_provider.dart' show currentUserProvider, userServiceProvider;
-import 'package:gam3ya/src/models/user_model.dart';
 
 import 'package:gam3ya/src/widgets/common/custom_text_field.dart';
 import 'package:gam3ya/src/widgets/common/loading_indicator.dart';

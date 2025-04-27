@@ -5,7 +5,6 @@ import 'package:gam3ya/src/models/user_model.dart';
 import 'package:gam3ya/src/widgets/animations/fade_animation.dart';
 import 'package:gam3ya/src/widgets/common/error_widget.dart';
 import 'package:gam3ya/src/widgets/common/loading_indicator.dart';
-import 'package:intl/intl.dart';
 
 import '../../controllers/user_provider.dart';
 

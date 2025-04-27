@@ -1,7 +1,6 @@
 // screens/auth/login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gam3ya/src/controllers/auth_provider.dart';
 import 'package:gam3ya/src/widgets/animations/fade_animation.dart';
 import 'package:gam3ya/src/widgets/common/custom_button.dart';
