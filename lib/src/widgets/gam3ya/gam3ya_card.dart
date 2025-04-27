@@ -5,6 +5,7 @@ import 'package:gam3ya/src/models/gam3ya_model.dart';
 import 'package:intl/intl.dart';
 
 import '../../constants/theme.dart';
+import '../../models/enum_models.dart';
 
 class Gam3yaCard extends StatelessWidget {
   final Gam3ya gam3ya;

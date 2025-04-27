@@ -6,6 +6,9 @@ import 'package:gam3ya/src/services/notification_service.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
+import '../models/enum_models.dart';
+import '../models/payment_model.dart';
+
 class Gam3yaService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
@@ -268,10 +271,11 @@ class Gam3yaService {
         amount: amount,
         paymentDate: now,
         cycleNumber: cycleNumber,
-        verificationCode: verificationCode,
+        verificationCode: verificationCode!,
         isVerified: paymentMethod != 'cash', // Electronic payments auto-verified
         paymentMethod: paymentMethod,
-        receiptUrl: receiptUrl,
+        receiptUrl: receiptUrl!,
+        gam3yaId: gam3yaId,
       );
 
       final updatedPayments = [...gam3ya.payments, payment];
@@ -294,14 +298,12 @@ class Gam3yaService {
       );
 
       // If cash payment, provide verification code to user
-      if (verificationCode != null) {
-        await _notificationService.sendUserNotification(
-          currentUser.uid,
-          'Payment Verification Code',
-        //  'Your verification code is: $verificationCode. Show this to the organizer.',
-        );
-      }
-    } catch (e) {
+      await _notificationService.sendUserNotification(
+        currentUser.uid,
+        'Payment Verification Code',
+      //  'Your verification code is: $verificationCode. Show this to the organizer.',
+      );
+        } catch (e) {
       print('Error making payment: $e');
       rethrow;
     }
@@ -347,6 +349,7 @@ class Gam3yaService {
         isVerified: true,
         paymentMethod: payment.paymentMethod,
         receiptUrl: payment.receiptUrl,
+        gam3yaId: gam3yaId,
       );
 
       final updatedPayments = List<Gam3yaPayment>.from(gam3ya.payments);

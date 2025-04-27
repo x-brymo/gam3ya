@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gam3ya/src/models/gam3ya_model.dart';
-import 'package:gam3ya/src/models/user_model.dart';
 
 import 'package:gam3ya/src/widgets/animations/fade_animation.dart';
 import 'package:intl/intl.dart';
 
 import '../../controllers/auth_provider.dart';
 import '../../controllers/gam3ya_provider.dart';
+import '../../models/enum_models.dart';
 import '../../widgets/common/custom_card.dart';
 import 'analytics_screen.dart';
 import 'manage_gam3yas_screen.dart';
@@ -21,22 +21,23 @@ class AdminDashboard extends ConsumerStatefulWidget {
   ConsumerState<AdminDashboard> createState() => _AdminDashboardState();
 }
 
-class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTickerProviderStateMixin {
+class _AdminDashboardState extends ConsumerState<AdminDashboard>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    
+
     // Fetch latest data when dashboard is opened
     Future.microtask(() {
-      ref.read(allUsersProvider.future);
-      ref.read(gam3yasProvider.future);
+      ref.read(allUsersProvider);
+      ref.read(gam3yasProvider);
     });
   }
-  
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -45,14 +46,19 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
 
   @override
   Widget build(BuildContext context) {
-    final allUsers = ref.watch(allUsersProvider);
+    final allUsers = ref.watch(allUsersProvider).asData;
     final allGam3yas = ref.watch(gam3yasProvider);
     final pendingGam3yas = ref.watch(pendingGam3yasProvider);
-    
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('لوحة التحكم الإدارية', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white)),
+        title: Text(
+          'لوحة التحكم الإدارية',
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(color: Colors.white),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -60,7 +66,7 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
               ref.read(allUsersProvider.future);
               ref.read(gam3yasProvider.future);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('تم تحديث البيانات'))
+                const SnackBar(content: Text('تم تحديث البيانات')),
               );
             },
           ),
@@ -78,11 +84,16 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
         controller: _tabController,
         children: [
           // Summary Tab
-          _buildSummaryTab(context, allUsers.value, allGam3yas.value, pendingGam3yas.value),
-          
+          _buildSummaryTab(
+            context,
+            //allUsers,
+            allGam3yas.value,
+            pendingGam3yas.value,
+          ),
+
           // Users Tab
           const ManageUsersScreen(),
-          
+
           // Gam3yas Tab
           const ManageGam3yasScreen(),
         ],
@@ -99,29 +110,35 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
       ),
     );
   }
-  
-  Widget _buildSummaryTab(BuildContext context, List<User>? users, List<Gam3ya>? gam3yas, List<Gam3ya>? pendingGam3yas) {
+
+  Widget _buildSummaryTab(
+    BuildContext context,
+    List<Gam3ya>? gam3yas,
+    List<Gam3ya>? pendingGam3yas,
+  ) {
     final theme = Theme.of(context);
-    
+
     // Calculate dashboard statistics
+    final users = ref.watch(allUsersProvider).asData?.value;
     final int totalUsers = users?.length ?? 0;
     final int totalGam3yas = gam3yas?.length ?? 0;
-    final int activeGam3yas = gam3yas?.where((g) => g.status == Gam3yaStatus.active).length ?? 0;
+    final int activeGam3yas =
+        gam3yas?.where((g) => g.status == Gam3yaStatus.active).length ?? 0;
     final int pendingCount = pendingGam3yas?.length ?? 0;
-    
+
     // Calculate total money in circulation
     double totalMoneyInCirculation = 0;
     gam3yas?.where((g) => g.status == Gam3yaStatus.active).forEach((gam3ya) {
       totalMoneyInCirculation += gam3ya.amount;
     });
-    
+
     // Format the currency amount
     final currencyFormatter = NumberFormat.currency(
       locale: 'ar_EG',
       symbol: 'ج.م ',
       decimalDigits: 0,
     );
-    
+
     return RefreshIndicator(
       onRefresh: () async {
         await ref.read(allUsersProvider.future);
@@ -133,13 +150,10 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'ملخص النظام',
-              style: theme.textTheme.headlineMedium,
-            ),
+            Text('ملخص النظام', style: theme.textTheme.headlineMedium),
             const SizedBox(height: 8),
             Text(
-              'مرحبًا بك في لوحة التحكم الإدارية', 
+              'مرحبًا بك في لوحة التحكم الإدارية',
               style: theme.textTheme.bodyLarge,
             ),
             const SizedBox(height: 24),
@@ -150,7 +164,7 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
               child: Row(
                 children: [
                   _buildStatCard(
-                    context, 
+                    context,
                     'المستخدمون',
                     totalUsers.toString(),
                     Icons.people,
@@ -161,7 +175,7 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
                   ),
                   const SizedBox(width: 16),
                   _buildStatCard(
-                    context, 
+                    context,
                     'الجمعيات النشطة',
                     activeGam3yas.toString(),
                     Icons.account_balance_wallet,
@@ -173,16 +187,16 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Second Row of Stats
             FadeAnimation(
               delay: Duration(milliseconds: 200),
               child: Row(
                 children: [
                   _buildStatCard(
-                    context, 
+                    context,
                     'طلبات قيد الانتظار',
                     pendingCount.toString(),
                     Icons.pending_actions,
@@ -194,7 +208,7 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
                   ),
                   const SizedBox(width: 16),
                   _buildStatCard(
-                    context, 
+                    context,
                     'إجمالي الجمعيات',
                     totalGam3yas.toString(),
                     Icons.account_balance,
@@ -206,12 +220,12 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Money in circulation
             FadeAnimation(
-              delay:Duration(milliseconds: 300),
+              delay: Duration(milliseconds: 300),
               child: CustomCard(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
@@ -220,7 +234,10 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.attach_money, color: theme.colorScheme.primary),
+                          Icon(
+                            Icons.attach_money,
+                            color: theme.colorScheme.primary,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             'الأموال المتداولة',
@@ -243,9 +260,9 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Recent Activities
             FadeAnimation(
               delay: Duration(milliseconds: 400),
@@ -267,7 +284,9 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
                               // Navigate to detailed activity log
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const AnalyticsScreen()),
+                                MaterialPageRoute(
+                                  builder: (context) => const AnalyticsScreen(),
+                                ),
                               );
                             },
                             child: const Text('عرض الكل'),
@@ -276,14 +295,19 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
                       ),
                       const Divider(),
                       if (pendingGam3yas != null && pendingGam3yas.isNotEmpty)
-                        ...pendingGam3yas.take(3).map((gam3ya) => _buildActivityItem(
-                          context,
-                          title: gam3ya.name,
-                          subtitle: 'تم إنشاء جمعية جديدة بقيمة ${currencyFormatter.format(gam3ya.amount)}',
-                          icon: Icons.add_circle,
-                          iconColor: Colors.green,
-                          timestamp: gam3ya.startDate,
-                        )),
+                        ...pendingGam3yas
+                            .take(3)
+                            .map(
+                              (gam3ya) => _buildActivityItem(
+                                context,
+                                title: gam3ya.name,
+                                subtitle:
+                                    'تم إنشاء جمعية جديدة بقيمة ${currencyFormatter.format(gam3ya.amount)}',
+                                icon: Icons.add_circle,
+                                iconColor: Colors.green,
+                                timestamp: gam3ya.startDate,
+                              ),
+                            ),
                       if (pendingGam3yas == null || pendingGam3yas.isEmpty)
                         const Center(
                           child: Padding(
@@ -296,9 +320,9 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Quick Actions
             FadeAnimation(
               delay: Duration(milliseconds: 500),
@@ -308,10 +332,7 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'إجراءات سريعة',
-                        style: theme.textTheme.titleLarge,
-                      ),
+                      Text('إجراءات سريعة', style: theme.textTheme.titleLarge),
                       const SizedBox(height: 16),
                       Wrap(
                         spacing: 12,
@@ -332,7 +353,9 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
                             () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const AnalyticsScreen()),
+                                MaterialPageRoute(
+                                  builder: (context) => const AnalyticsScreen(),
+                                ),
                               );
                             },
                           ),
@@ -359,15 +382,22 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 24),
           ],
         ),
       ),
     );
   }
-  
-  Widget _buildStatCard(BuildContext context, String title, String value, IconData icon, Color color, VoidCallback onTap) {
+
+  Widget _buildStatCard(
+    BuildContext context,
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
@@ -391,10 +421,7 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+                Text(title, style: Theme.of(context).textTheme.titleMedium),
               ],
             ),
           ),
@@ -413,7 +440,7 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
   }) {
     final theme = Theme.of(context);
     final formattedDate = DateFormat('dd/MM/yyyy - hh:mm a').format(timestamp);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -447,18 +474,21 @@ class _AdminDashboardState extends ConsumerState<AdminDashboard> with SingleTick
     );
   }
 
-  Widget _buildActionButton(BuildContext context, String label, IconData icon, VoidCallback onPressed) {
+  Widget _buildActionButton(
+    BuildContext context,
+    String label,
+    IconData icon,
+    VoidCallback onPressed,
+  ) {
     final theme = Theme.of(context);
-    
+
     return ElevatedButton.icon(
       onPressed: onPressed,
       icon: Icon(icon, size: 18),
       label: Text(label),
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }

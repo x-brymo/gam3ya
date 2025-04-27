@@ -8,6 +8,7 @@ import 'package:gam3ya/src/widgets/common/loading_indicator.dart';
 import 'package:intl/intl.dart';
 
 import '../../controllers/gam3ya_provider.dart';
+import '../../models/enum_models.dart';
 
 class ManageGam3yasScreen extends ConsumerStatefulWidget {
   const ManageGam3yasScreen({super.key});

@@ -36,11 +36,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     Future.microtask(() {
       final userAsync = ref.read(currentUserProvider);
       userAsync.whenData((user) {
-        if (user != null) {
-          _nameController.text = user.name;
-          _phoneController.text = user.phone;
-        }
-      });
+        _nameController.text = user.name;
+        _phoneController.text = user.phone;
+            });
     });
   }
 
@@ -69,7 +67,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
     try {
       final currentUser = await ref.read(currentUserProvider.future);
-      if (currentUser == null) throw Exception('تسجيل الدخول مطلوب');
 
       String? photoUrl = currentUser.photoUrl;
 
@@ -124,10 +121,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       ),
       body: userAsync.when(
         data: (user) {
-          if (user == null) {
-            return const Center(child: Text('تسجيل الدخول مطلوب'));
-          }
-
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Form(

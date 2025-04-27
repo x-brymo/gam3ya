@@ -1,8 +1,11 @@
 // screens/home/dashboard_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gam3ya/src/controllers/user_provider.dart' show userStatsProvider;
-import 'package:gam3ya/src/models/gam3ya_model.dart';
+import 'package:gam3ya/src/constants/routes.dart';
+import 'package:gam3ya/src/controllers/user_provider.dart'
+    show userStatsProvider;
+import 'package:gam3ya/src/models/payment_model.dart';
+import 'package:gam3ya/src/models/user_model.dart';
 
 import 'package:gam3ya/src/widgets/animations/slide_animation.dart';
 import 'package:gam3ya/src/widgets/common/error_widget.dart';
@@ -13,6 +16,7 @@ import 'package:intl/intl.dart';
 import '../../controllers/auth_provider.dart';
 import '../../controllers/gam3ya_provider.dart';
 import '../../controllers/payment_provider.dart';
+import '../../models/enum_models.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -21,38 +25,41 @@ class DashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
     final userGam3yas = ref.watch(userGam3yasProvider);
-    final upcomingPayments = ref.watch(upcomingPaymentsProvider as ProviderListenable);
-    final userStats = ref.watch(userStatsProvider as ProviderListenable);
+    final upcomingPayments = ref.watch(upcomingPaymentsProvider(user.id));
+    final userStats = ref.watch(userStatsProvider(user.id));
 
     return RefreshIndicator(
       onRefresh: () async {
         ref.refresh(userGam3yasProvider);
-        ref.refresh(upcomingPaymentsProvider as Refreshable);
-        ref.refresh(userStatsProvider as Refreshable);
+        ref.refresh(upcomingPaymentsProvider(user.id));
+        ref.refresh(userStatsProvider(user.id));
       },
       child: CustomScrollView(
         slivers: [
           // App Bar
           SliverAppBar(
             expandedHeight: 120,
+            automaticallyImplyLeading: false,
             floating: true,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                'مرحباً ${user?.name.split(' ').first ?? 'بك'}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                'مرحباً ${user.name.split(' ').first ?? 'بك'}',
+                //style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.secondary,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+              background: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(52), bottomRight: Radius.circular(52)),
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.secondary,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                   ),
                 ),
               ),
@@ -68,6 +75,37 @@ class DashboardScreen extends ConsumerWidget {
                   );
                 },
               ),
+              
+              IconButton(
+                icon: const Icon(Icons.new_releases_rounded),
+                onPressed: () {
+                  // Show search dialog
+                  showDialog(
+                    context: context,
+                    builder:
+                        (context) => AlertDialog(
+                          title: const Text(
+                            'قريبا كل الاخبار الجديده داخل التطبيق',
+                          ),
+                          content: const Text('تبعونا'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("نعم"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("لا"),
+                            ),
+                          ],
+                        ),
+                  );
+                },
+              ),
             ],
           ),
 
@@ -78,12 +116,18 @@ class DashboardScreen extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: userStats.when(
-                  data: (stats) => _buildStatsCards(context, stats),
-                  loading: () => const LoadingIndicator(),
-                  error: (error, stackTrace) => ErrorDisplayWidget(
-                    message: 'حدث خطأ أثناء تحميل البيانات',
-                    onRetry: () => ref.refresh(userStatsProvider as Refreshable<void>),
-                  ),
+                  data: (stats) {
+                    return _buildStatsCards(context, stats!);
+                  },
+                  error: (Object error, StackTrace stackTrace) {
+                    return ErrorDisplayWidget(
+                      message: 'حدث خطأ أثناء تحميل الإحصائيات',
+                      onRetry: () => ref.refresh(userStatsProvider(user.id)),
+                    );
+                  },
+                  loading: () {
+                    return const LoadingIndicator();
+                  },
                 ),
               ),
             ),
@@ -107,7 +151,7 @@ class DashboardScreen extends ConsumerWidget {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/payments/upcoming');
+                            Navigator.pushNamed(context, AppRoutes.gam3yaList);
                           },
                           child: const Text('عرض الكل'),
                         ),
@@ -131,10 +175,14 @@ class DashboardScreen extends ConsumerWidget {
                         return _buildUpcomingPayments(context, payments);
                       },
                       loading: () => const LoadingIndicator(),
-                      error: (error, stackTrace) => ErrorDisplayWidget(
-                        message: 'حدث خطأ أثناء تحميل المدفوعات',
-                        onRetry: () => ref.refresh(upcomingPaymentsProvider as Refreshable<void>),
-                      ),
+                      error:
+                          (error, stackTrace) => ErrorDisplayWidget(
+                            message: 'حدث خطأ أثناء تحميل المدفوعات',
+                            onRetry:
+                                () => ref.refresh(
+                                  upcomingPaymentsProvider as Refreshable<void>,
+                                ),
+                          ),
                     ),
                   ],
                 ),
@@ -145,7 +193,7 @@ class DashboardScreen extends ConsumerWidget {
           // Active Gam3yas
           SliverToBoxAdapter(
             child: SlideAnimation(
-              delay:Duration(milliseconds: 300),
+              delay: Duration(milliseconds: 300),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -160,7 +208,7 @@ class DashboardScreen extends ConsumerWidget {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/gam3yas');
+                            Navigator.pushNamed(context, AppRoutes.gam3yaList);
                           },
                           child: const Text('عرض الكل'),
                         ),
@@ -169,9 +217,10 @@ class DashboardScreen extends ConsumerWidget {
                     const SizedBox(height: 8),
                     userGam3yas.when(
                       data: (gam3yas) {
-                        final activeGam3yas = gam3yas
-                            .where((g) => g.status == Gam3yaStatus.active)
-                            .toList();
+                        final activeGam3yas =
+                            gam3yas
+                                .where((g) => g.status == Gam3yaStatus.active)
+                                .toList();
 
                         if (activeGam3yas.isEmpty) {
                           return const Center(
@@ -196,13 +245,16 @@ class DashboardScreen extends ConsumerWidget {
                                 padding: const EdgeInsets.only(right: 16.0),
                                 child: SizedBox(
                                   width: 300,
-                                  child: Gam3yaCard(gam3ya: gam3ya, onTap: () {  
-                                    Navigator.pushNamed(
-                                      context,
-                                      '/gam3ya-details',
-                                      arguments: gam3ya.id,
-                                    );
-                                  },),
+                                  child: Gam3yaCard(
+                                    gam3ya: gam3ya,
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        AppRoutes.gam3yaDetail,
+                                        arguments: gam3ya.id,
+                                      );
+                                    },
+                                  ),
                                 ),
                               );
                             },
@@ -210,10 +262,11 @@ class DashboardScreen extends ConsumerWidget {
                         );
                       },
                       loading: () => const LoadingIndicator(),
-                      error: (error, stackTrace) => ErrorDisplayWidget(
-                        message: 'حدث خطأ أثناء تحميل الجمعيات',
-                        onRetry: () => ref.refresh(userGam3yasProvider),
-                      ),
+                      error:
+                          (error, stackTrace) => ErrorDisplayWidget(
+                            message: 'حدث خطأ أثناء تحميل الجمعيات',
+                            onRetry: () => ref.refresh(userGam3yasProvider),
+                          ),
                     ),
                   ],
                 ),
@@ -225,7 +278,10 @@ class DashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatsCards(BuildContext context, Map<String, dynamic> stats) {
+  Widget _buildStatsCards(BuildContext context, User stats) {
+    final stateData =
+        stats.statusLife!.isNotEmpty ? stats.statusLife!.first : null;
+
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -247,14 +303,14 @@ class DashboardScreen extends ConsumerWidget {
                 _buildStatItem(
                   context,
                   'نقاط السمعة',
-                  '${stats['reputationScore']}',
+                  '${stats.reputationScore}',
                   Icons.star,
                   Colors.amber,
                 ),
                 _buildStatItem(
                   context,
                   'جمعيات نشطة',
-                  '${stats['activeGam3yas']}',
+                  stateData?.activeGam3yas ?? 'غير متاح',
                   Icons.group,
                   Colors.green,
                 ),
@@ -266,14 +322,14 @@ class DashboardScreen extends ConsumerWidget {
                 _buildStatItem(
                   context,
                   'مستحقات شهرية',
-                  '${NumberFormat("#,###").format(stats['monthlyDue'])} ج.م',
+                  '${stateData != null ? NumberFormat("#,###").format(int.tryParse(stateData.monthlyDue) ?? 0) : 'غير متاح'} ج.م',
                   Icons.account_balance_wallet,
                   Colors.blue,
                 ),
                 _buildStatItem(
                   context,
                   'دخل متوقع',
-                  '${NumberFormat("#,###").format(stats['expectedIncome'])} ج.م',
+                  '${stateData != null ? NumberFormat("#,###").format(int.tryParse(stateData.expectedIncome) ?? 0) : 'غير متاح'} ج.م',
                   Icons.monetization_on,
                   Colors.orange,
                 ),
@@ -286,7 +342,12 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   Widget _buildStatItem(
-      BuildContext context, String title, String value, IconData icon, Color color) {
+    BuildContext context,
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Expanded(
       child: Row(
         children: [
@@ -297,25 +358,19 @@ class DashboardScreen extends ConsumerWidget {
               color: color.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              icon,
-              color: color,
-            ),
+            child: Icon(icon, color: color),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
+                Text(title, style: Theme.of(context).textTheme.bodySmall),
                 Text(
                   value,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -326,84 +381,88 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   Widget _buildUpcomingPayments(
-      BuildContext context, List<Map<String, dynamic>> payments) {
+    BuildContext context,
+    List<Gam3yaPayment> payments,
+  ) {
     return Column(
-      children: payments.take(3).map((payment) {
-        final DateTime dueDate = payment['dueDate'];
-        final bool isLate = dueDate.isBefore(DateTime.now());
-        final daysLeft = dueDate.difference(DateTime.now()).inDays;
+      children:
+          payments.take(3).map((payment) {
+            final DateTime dueDate = payment.paymentDate;
+            final bool isLate = dueDate.isBefore(DateTime.now());
+            final daysLeft = dueDate.difference(DateTime.now()).inDays;
 
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 5,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: ListTile(
-            leading: Container(
-              width: 50,
-              height: 50,
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
               decoration: BoxDecoration(
-                color: isLate
-                    ? Colors.red.withOpacity(0.1)
-                    : daysLeft <= 3
-                        ? Colors.orange.withOpacity(0.1)
-                        : Colors.green.withOpacity(0.1),
-                shape: BoxShape.circle,
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
-              child: Center(
-                child: Icon(
-                  isLate
-                      ? Icons.warning
-                      : daysLeft <= 3
+              child: ListTile(
+                leading: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color:
+                        isLate
+                            ? Colors.red.withOpacity(0.1)
+                            : daysLeft <= 3
+                            ? Colors.orange.withOpacity(0.1)
+                            : Colors.green.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      isLate
+                          ? Icons.warning
+                          : daysLeft <= 3
                           ? Icons.access_time
                           : Icons.calendar_today,
-                  color: isLate
-                      ? Colors.red
-                      : daysLeft <= 3
-                          ? Colors.orange
-                          : Colors.green,
+                      color:
+                          isLate
+                              ? Colors.red
+                              : daysLeft <= 3
+                              ? Colors.orange
+                              : Colors.green,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            title: Text(payment['gam3yaName']),
-            subtitle: Text(
-              isLate
-                  ? 'متأخر بـ ${-daysLeft} يوم'
-                  : daysLeft == 0
+                //title: Text(),
+                subtitle: Text(
+                  isLate
+                      ? 'متأخر بـ ${-daysLeft} يوم'
+                      : daysLeft == 0
                       ? 'اليوم'
                       : 'متبقي $daysLeft يوم',
-              style: TextStyle(
-                color: isLate
-                    ? Colors.red
-                    : daysLeft <= 3
-                        ? Colors.orange
-                        : Colors.green,
+                  style: TextStyle(
+                    color:
+                        isLate
+                            ? Colors.red
+                            : daysLeft <= 3
+                            ? Colors.orange
+                            : Colors.green,
+                  ),
+                ),
+                trailing: Text(
+                  '${NumberFormat("#,###").format(payment.amount)} ج.م',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/payments/pay',
+                    arguments: payment,
+                  );
+                },
               ),
-            ),
-            trailing: Text(
-              '${NumberFormat("#,###").format(payment['amount'])} ج.م',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                '/payments/pay',
-                arguments: payment,
-              );
-            },
-          ),
-        );
-      }).toList(),
+            );
+          }).toList(),
     );
   }
 }
@@ -439,9 +498,7 @@ class Gam3yaSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     return query.isEmpty
-        ? const Center(
-            child: Text('ابحث عن جمعية باسمها أو وصفها'),
-          )
+        ? const Center(child: Text('ابحث عن جمعية باسمها أو وصفها'))
         : _buildSearchResults(context, query);
   }
 
@@ -449,13 +506,11 @@ class Gam3yaSearchDelegate extends SearchDelegate {
     return Consumer(
       builder: (context, ref, child) {
         final searchResults = ref.watch(searchGam3yasProvider(query));
-        
+
         return searchResults.when(
           data: (results) {
             if (results.isEmpty) {
-              return const Center(
-                child: Text('لا توجد نتائج'),
-              );
+              return const Center(child: Text('لا توجد نتائج'));
             }
 
             return ListView.builder(
@@ -483,12 +538,8 @@ class Gam3yaSearchDelegate extends SearchDelegate {
               },
             );
           },
-          loading: () => const Center(
-            child: CircularProgressIndicator(),
-          ),
-          error: (error, stackTrace) => Center(
-            child: Text('حدث خطأ: $error'),
-          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stackTrace) => Center(child: Text('حدث خطأ: $error')),
         );
       },
     );

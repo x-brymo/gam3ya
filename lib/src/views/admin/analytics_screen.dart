@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import '../../controllers/auth_provider.dart';
 import '../../controllers/gam3ya_provider.dart';
 import '../../controllers/payment_provider.dart';
+import '../../models/enum_models.dart';
 
 class AnalyticsScreen extends ConsumerStatefulWidget {
   const AnalyticsScreen({super.key});

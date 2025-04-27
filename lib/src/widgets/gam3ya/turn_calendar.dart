@@ -5,6 +5,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gam3ya/src/models/gam3ya_model.dart';
 import 'package:intl/intl.dart';
 
+import '../../models/enum_models.dart';
+
 class TurnCalendar extends StatefulWidget {
   final Gam3ya gam3ya;
   final String currentUserId;

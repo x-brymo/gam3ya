@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../controllers/auth_provider.dart';
+import '../../models/enum_models.dart';
 
 class CreateGam3yaScreen extends ConsumerStatefulWidget {
   const CreateGam3yaScreen({super.key});
@@ -87,12 +88,6 @@ class _CreateGam3yaScreenState extends ConsumerState<CreateGam3yaScreen> {
     
     try {
       final currentUser = ref.read(currentUserProvider);
-      if (currentUser == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('You need to be logged in to create a Gam3ya')),
-        );
-        return;
-      }
 
       // Automatic size detection based on amount
       final amount = double.parse(_amountController.text);

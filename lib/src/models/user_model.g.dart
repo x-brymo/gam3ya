@@ -29,13 +29,14 @@ class UserAdapter extends TypeAdapter<User> {
       guarantorForUserIds: (fields[9] as List).cast<String>(),
       guarantorUserId: fields[10] as String?,
       status: fields[11] as UserStatus?,
+      statusLife: (fields[12] as List?)?.cast<UserStateLife>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, User obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -59,7 +60,9 @@ class UserAdapter extends TypeAdapter<User> {
       ..writeByte(10)
       ..write(obj.guarantorUserId)
       ..writeByte(11)
-      ..write(obj.status);
+      ..write(obj.status)
+      ..writeByte(12)
+      ..write(obj.statusLife);
   }
 
   @override

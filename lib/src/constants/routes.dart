@@ -46,6 +46,7 @@ class AppRoutes {
   static const String paymentHistory = '/payment/history';
   static const String qrScanner = '/payment/scanner';
   
+  
   static const String adminDashboard = '/admin';
   static const String manageUsers = '/admin/users';
   static const String manageGam3yas = '/admin/gam3yas';
@@ -58,7 +59,10 @@ class AppRoutes {
     signup: (context) => const SignupScreen(),
     forgotPassword: (context) => const ForgotPasswordScreen(),
     
-    home: (context) => const HomeScreen(),
+    home: (context) {
+      
+       return HomeScreen();
+    },
     dashboard: (context) => const DashboardScreen(),
     notifications: (context) => const NotificationsScreen(),
     
@@ -82,43 +86,43 @@ class AppRoutes {
   };
 }
 
-// config/constants.dart
-class AppConstants {
-  // Firebase collections
-  static const String usersCollection = 'users';
-  static const String gam3yasCollection = 'gam3yas';
-  static const String paymentsCollection = 'payments';
-  static const String notificationsCollection = 'notifications';
+// // config/constants.dart
+// class AppConstants {
+//   // Firebase collections
+//   static const String usersCollection = 'users';
+//   static const String gam3yasCollection = 'gam3yas';
+//   static const String paymentsCollection = 'payments';
+//   static const String notificationsCollection = 'notifications';
   
-  // Hive box names
-  static const String usersBox = 'users';
-  static const String gam3yasBox = 'gam3yas';
-  static const String settingsBox = 'appSettings';
+//   // Hive box names
+//   static const String usersBox = 'users';
+//   static const String gam3yasBox = 'gam3yas';
+//   static const String settingsBox = 'appSettings';
   
-  // App settings
-  static const String languageKey = 'language';
-  static const String themeKey = 'theme';
-  static const String notificationsKey = 'notifications';
+//   // App settings
+//   static const String languageKey = 'language';
+//   static const String themeKey = 'theme';
+//   static const String notificationsKey = 'notifications';
   
-  // Reputation system
-  static const int defaultReputationScore = 100;
-  static const int reputationDecreaseLatePayment = 5;
-  static const int reputationDecreaseNoPayment = 15;
-  static const int reputationIncreaseOnTimePayment = 2;
-  static const int reputationIncreaseEarlyPayment = 5;
+//   // Reputation system
+//   static const int defaultReputationScore = 100;
+//   static const int reputationDecreaseLatePayment = 5;
+//   static const int reputationDecreaseNoPayment = 15;
+//   static const int reputationIncreaseOnTimePayment = 2;
+//   static const int reputationIncreaseEarlyPayment = 5;
   
-  // Payment related
-  static const double defaultSafetyFundPercentage = 5.0;
-  static const int paymentReminderDaysBeforeDue = 3;
+//   // Payment related
+//   static const double defaultSafetyFundPercentage = 5.0;
+//   static const int paymentReminderDaysBeforeDue = 3;
   
-  // Validation rules
-  static const int minPasswordLength = 8;
-  static const int minGam3yaMembers = 3;
-  static const int maxGam3yaMembers = 30;
-  static const double minGam3yaAmount = 100;
+//   // Validation rules
+//   static const int minPasswordLength = 8;
+//   static const int minGam3yaMembers = 3;
+//   static const int maxGam3yaMembers = 30;
+//   static const double minGam3yaAmount = 100;
   
-  // Animation durations
-  static const Duration shortAnimationDuration = Duration(milliseconds: 300);
-  static const Duration mediumAnimationDuration = Duration(milliseconds: 500);
-  static const Duration longAnimationDuration = Duration(milliseconds: 800);
-}
+//   // Animation durations
+//   static const Duration shortAnimationDuration = Duration(milliseconds: 300);
+//   static const Duration mediumAnimationDuration = Duration(milliseconds: 500);
+//   static const Duration longAnimationDuration = Duration(milliseconds: 800);
+// }

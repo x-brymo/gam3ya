@@ -6,6 +6,7 @@ import 'package:gam3ya/src/models/gam3ya_model.dart';
 import 'package:gam3ya/src/services/firebase_service.dart';
 import 'package:uuid/uuid.dart';
 
+import '../models/payment_model.dart';
 import 'auth_provider.dart';
 import 'gam3ya_provider.dart';
 
@@ -36,10 +37,6 @@ final allPaymentsProvider = FutureProvider<List<Gam3yaPayment>>((ref) async {
 });
 final userPaymentsProvider = FutureProvider<List<Gam3yaPayment>>((ref) async {
   final currentUser =  ref.watch(currentUserProvider.notifier).state;
-  
-  if (currentUser == null) {
-    return [];
-  }
   
   final userGam3yas = await ref.watch(userGam3yasProvider.future);
   
@@ -85,6 +82,8 @@ final generatePaymentQRCodeProvider = FutureProvider.family<String, Map<String, 
     verificationCode: verificationCode,
     isVerified: false,
     paymentMethod: 'cash',
+     receiptUrl: '',
+    gam3yaId: gam3ya.id,
   );
   
   // Add the payment to the gam3ya payments list
@@ -117,6 +116,8 @@ final paymentQRCodeProvider = FutureProvider.family<String?, String>((ref, payme
       verificationCode: '',
       isVerified: false,
       paymentMethod: 'cash',
+       receiptUrl: '',
+    gam3yaId: gam3ya.id,
     ),
   );
   
@@ -138,6 +139,8 @@ final paymentProvider = FutureProvider.family<Gam3yaPayment?, String>((ref, paym
     verificationCode: '',
     isVerified: false,
     paymentMethod: 'cash',
+    receiptUrl: '',
+    gam3yaId: gam3ya.id,
   ));
 });
 final paymentHistoryProvider = FutureProvider.family<List<Gam3yaPayment>, String>((ref, userId) async {
@@ -191,6 +194,8 @@ final paymentDetailsProvider = FutureProvider.family<Gam3yaPayment?, String>((re
     verificationCode: '',
     isVerified: false,
     paymentMethod: 'cash',
+    receiptUrl: '',
+    gam3yaId: gam3ya.id,
   ));
 });
 
@@ -230,6 +235,7 @@ final verifyPaymentProvider = FutureProvider.family<bool, Map<String, dynamic>>(
     isVerified: true,
     paymentMethod: payment.paymentMethod,
     receiptUrl: payment.receiptUrl,
+    gam3yaId: gam3yaId,
   );
   
   // Update the payments list
@@ -244,13 +250,11 @@ final verifyPaymentProvider = FutureProvider.family<bool, Map<String, dynamic>>(
   final userService = ref.watch(userServiceProvider);
   final user = await userService.getUserProfile(payment.userId);
   
-  if (user != null) {
-    // Increase reputation for on-time payment
-    final updatedUser = user.copyWith(
-      reputationScore: user.reputationScore + 1, // Small increment for payment
-    );
-    await userService.updateUserProfile(user.id, updatedUser);
-  }
+  // Increase reputation for on-time payment
+  final updatedUser = user.copyWith(
+    reputationScore: user.reputationScore + 1, // Small increment for payment
+  );
+  await userService.updateUserProfile(user.id, updatedUser);
   
   return true;
 });

@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gam3ya/src/models/gam3ya_model.dart';
 
 import 'package:gam3ya/src/widgets/common/custom_button.dart';
 import 'package:gam3ya/src/widgets/common/loading_indicator.dart';
@@ -12,6 +11,7 @@ import 'package:intl/intl.dart';
 
 import '../../controllers/auth_provider.dart';
 import '../../controllers/gam3ya_provider.dart';
+import '../../models/enum_models.dart';
 
 class Gam3yaDetailScreen extends ConsumerStatefulWidget {
   final String gam3yaId;
@@ -118,9 +118,9 @@ class _Gam3yaDetailScreenState extends ConsumerState<Gam3yaDetailScreen>
           }
 
           final isCurrentUserMember = gam3ya.members.any(
-            (member) => member.userId == currentUser?.id,
+            (member) => member.userId == currentUser.id,
           );
-          final isCreator = currentUser?.id == gam3ya.creatorId;
+          final isCreator = currentUser.id == gam3ya.creatorId;
 
           return Column(
             children: [
@@ -268,7 +268,7 @@ class _Gam3yaDetailScreenState extends ConsumerState<Gam3yaDetailScreen>
                           member.userId:
                               'User #${member.userId.substring(0, 5)}',
                       },
-                      currentUserId: currentUser!.id,
+                      currentUserId: currentUser.id,
                          
                     ),
 

@@ -1,22 +1,17 @@
 // models/user_model.dart
 import 'package:hive/hive.dart';
 
+import 'enum_models.dart';
+
 part 'user_model.g.dart';
 
-enum UserRole {
-  user,
-  organizer,
-  moderator,
-  admin,
-}
-enum UserStatus {
-  active,
-  inactive,
-  banned,
-  suspended,  
-  offline,
+// enum UserRole {
+//   user,
+//   organizer,
+//   moderator,
+//   admin,
+// }
 
-} 
 
 
 @HiveType(typeId: 9)
@@ -55,7 +50,10 @@ class User {
   final String? guarantorUserId;
   @HiveField(11)
   final UserStatus? status;
-  User({
+  @HiveField(12)
+  final List<UserStateLife>? statusLife;
+  
+  User( {
     required this.id,
     required this.name,
     required this.email,
@@ -68,6 +66,7 @@ class User {
     this.guarantorForUserIds = const [],
     this.guarantorUserId,
     this.status = UserStatus.active,
+      this.statusLife,
   }) : assert(
           reputationScore >= 0 && reputationScore <= 100,
           'Reputation score must be between 0 and 100',
@@ -85,6 +84,8 @@ class User {
     List<String>? createdGam3yasIds,
     List<String>? guarantorForUserIds,
     String? guarantorUserId,
+    UserStatus? status,
+    List<UserStateLife>? statusLife,
   }) {
     return User(
       id: id,
@@ -97,7 +98,9 @@ class User {
       joinedGam3yasIds: joinedGam3yasIds ?? this.joinedGam3yasIds,
       createdGam3yasIds: createdGam3yasIds ?? this.createdGam3yasIds,
       guarantorForUserIds: guarantorForUserIds ?? this.guarantorForUserIds,
-      guarantorUserId: guarantorUserId ?? this.guarantorUserId,
+      guarantorUserId: guarantorUserId ?? this.guarantorUserId, 
+      statusLife: statusLife ?? this.statusLife,
+      status: status ?? this.status,
     );
   }
 
@@ -133,6 +136,12 @@ class User {
       createdGam3yasIds: List<String>.from(json['createdGam3yasIds'] ?? []),
       guarantorForUserIds: List<String>.from(json['guarantorForUserIds'] ?? []),
       guarantorUserId: json['guarantorUserId'],
+      statusLife: List<UserStateLife>.from(json['statusLife'] ?? []),
+      status: UserStatus.values.firstWhere(
+        (e) => e.toString() == json['status'],
+        orElse: () => UserStatus.active,
+      ),
+
     );
   }
 

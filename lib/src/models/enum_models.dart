@@ -8,13 +8,13 @@ part 'enum_models.g.dart';
 enum UserRole {
   @HiveField(0)
   user,
-  
+
   @HiveField(1)
   organizer,
-  
+
   @HiveField(2)
   moderator,
-  
+
   @HiveField(3)
   admin,
 }
@@ -23,51 +23,110 @@ enum UserRole {
 enum Gam3yaStatus {
   @HiveField(0)
   pending,
-  
+
   @HiveField(1)
   active,
-  
+
   @HiveField(2)
   completed,
-  
+
   @HiveField(3)
   rejected,
-  
+
   @HiveField(4)
-  cancelled
+  cancelled,
 }
 
 @HiveType(typeId: 13)
 enum Gam3yaDuration {
   @HiveField(0)
   monthly,
-  
+
   @HiveField(1)
   quarterly,
-  
+
   @HiveField(2)
-  yearly
+  yearly,
 }
 
 @HiveType(typeId: 14)
 enum Gam3yaSize {
   @HiveField(0)
   small,
-  
+
   @HiveField(1)
   medium,
-  
+
   @HiveField(2)
-  large
+  large,
 }
 
 @HiveType(typeId: 15)
 enum Gam3yaAccess {
   @HiveField(0)
   public,
-  
+
   @HiveField(1)
-  private
+  private,
+}
+
+@HiveType(typeId: 16)
+enum UserStatus {
+  @HiveField(0)
+  active,
+  @HiveField(1)
+  inactive,
+  @HiveField(2)
+  banned,
+  @HiveField(3)
+  suspended,
+  @HiveField(4)
+  offline,
+}
+
+@HiveType(typeId: 17)
+class UserStateLife {
+  @HiveField(0)
+ final String expectedIncome;
+  @HiveField(1)
+  final String reputationScore;
+  @HiveField(2)
+  final String activeGam3yas;
+  @HiveField(3)
+  final String monthlyDue;
+  
+
+  UserStateLife({
+    
+    required this.reputationScore,
+    required this.activeGam3yas,
+    required this.monthlyDue,
+    required this.expectedIncome,
+  });
+  factory UserStateLife.fromJson(Map<String, dynamic> json) {
+    return UserStateLife(
+      
+      reputationScore: json['reputation_score'],
+      activeGam3yas: json['active_gam3yas'],
+      monthlyDue: json['monthly_due'],
+      expectedIncome: json['expected_income'],
+    );
+
+}
+Map<String, dynamic> toJson() {
+    return {
+      
+      'reputation_score': reputationScore,
+      'active_gam3yas': activeGam3yas,
+      'monthly_due': monthlyDue,
+      'expected_income': expectedIncome,
+    };
+  }
+  @override
+  String toString() {
+    return 'UserStateLife( reputationScore: $reputationScore, activeGam3yas: $activeGam3yas, monthlyDue: $monthlyDue, expectedIncome: $expectedIncome)';
+  }
+
 }
 
 // Extension methods for more descriptive names
@@ -84,7 +143,7 @@ extension UserRoleExtension on UserRole {
         return 'Admin';
     }
   }
-  
+
   String get arabicName {
     switch (this) {
       case UserRole.user:
@@ -114,7 +173,7 @@ extension Gam3yaStatusExtension on Gam3yaStatus {
         return 'Cancelled';
     }
   }
-  
+
   String get arabicName {
     switch (this) {
       case Gam3yaStatus.pending:
@@ -129,7 +188,7 @@ extension Gam3yaStatusExtension on Gam3yaStatus {
         return 'ملغاة';
     }
   }
-  
+
   Color get color {
     switch (this) {
       case Gam3yaStatus.pending:
@@ -157,7 +216,7 @@ extension Gam3yaDurationExtension on Gam3yaDuration {
         return 'Yearly';
     }
   }
-  
+
   String get arabicName {
     switch (this) {
       case Gam3yaDuration.monthly:
@@ -168,7 +227,7 @@ extension Gam3yaDurationExtension on Gam3yaDuration {
         return 'سنوية';
     }
   }
-  
+
   int get monthsInterval {
     switch (this) {
       case Gam3yaDuration.monthly:
@@ -192,7 +251,7 @@ extension Gam3yaSizeExtension on Gam3yaSize {
         return 'Large';
     }
   }
-  
+
   String get arabicName {
     switch (this) {
       case Gam3yaSize.small:
@@ -214,7 +273,7 @@ extension Gam3yaAccessExtension on Gam3yaAccess {
         return 'Private';
     }
   }
-  
+
   String get arabicName {
     switch (this) {
       case Gam3yaAccess.public:
@@ -223,13 +282,30 @@ extension Gam3yaAccessExtension on Gam3yaAccess {
         return 'خاصة';
     }
   }
-  
+
   IconData get icon {
     switch (this) {
       case Gam3yaAccess.public:
         return Icons.public;
       case Gam3yaAccess.private:
         return Icons.lock;
+    }
+  }
+}
+
+extension UserStatusExtension on UserStatus {
+  String get displayName {
+    switch (this) {
+      case UserStatus.active:
+        return 'Active';
+      case UserStatus.inactive:
+        return 'Inactive';
+      case UserStatus.banned:
+        return 'Banned';
+      case UserStatus.suspended:
+        return 'Suspended';
+      case UserStatus.offline:
+        return 'Offline';
     }
   }
 }

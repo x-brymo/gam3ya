@@ -3,7 +3,12 @@
     "flutterTools.displayMobxContextMenu": false,
     "flutterTools.displayRiverpodContextMenu": false,
     "flutterTools.displayModularContextMenu": false,
+<<<<<<< HEAD
     "cSpell.words": [
         "allprojects"
     ]
+=======
+    "IDX.aI.enableInlineCompletion": true,
+    "IDX.aI.enableCodebaseIndexing": true
+>>>>>>> b6d0519 (tek)
 }

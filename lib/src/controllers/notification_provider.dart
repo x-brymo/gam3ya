@@ -15,10 +15,6 @@ final userNotificationsProvider = StreamProvider<List<UserNotification>>((ref) {
   final notificationService = ref.watch(notificationServiceProvider);
   final currentUser = ref.watch(currentUserProvider);
   
-  if (currentUser == null) {
-    return Stream.value([]);
-  }
-  
   return notificationService.getUserNotifications(currentUser.id);
 });
 

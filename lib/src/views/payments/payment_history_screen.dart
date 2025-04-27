@@ -5,8 +5,8 @@ import 'package:gam3ya/src/controllers/user_provider.dart' show currentUserProvi
 import 'package:intl/intl.dart';
 
 import '../../controllers/payment_provider.dart';
-import '../../models/gam3ya_model.dart';
 import '../../models/payment_history_model.dart';
+import '../../models/payment_model.dart';
 import '../../widgets/common/empty_state_widget.dart';
 import '../../widgets/common/loading_indicator.dart';
 
@@ -268,8 +268,7 @@ class PaymentHistoryScreen extends ConsumerWidget {
               _buildDetailRow(context, 'Payment Method', _formatPaymentMethod(payment.paymentMethod)),
               _buildDetailRow(context, 'Status', payment.isVerified ? 'Verified' : 'Pending Verification'),
               
-              if (payment.verificationCode != null)
-                _buildDetailRow(context, 'Verification Code', payment.verificationCode!),
+              _buildDetailRow(context, 'Verification Code', payment.verificationCode),
               
               const SizedBox(height: 32),
               

@@ -3,45 +3,70 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gam3ya/src/models/user_model.dart';
 import 'package:gam3ya/src/services/auth_service.dart';
 
+import '../models/enum_models.dart';
+
 final authServiceProvider = Provider<AuthService>((ref) {
   return AuthService();
 });
 
-final authStateProvider = StreamProvider<User?>((ref) {
+final authStateProvider = StreamProvider<User>((ref) {
   final authService = ref.watch(authServiceProvider);
   return authService.authStateChanges.map((firebaseUser) {
-    if (firebaseUser == null) {
-      return null;
-    } else {
-      return User(
+    if (firebaseUser != null) {
+       return User(
         id: firebaseUser.id,
         email: firebaseUser.email,
         name: firebaseUser.name,
         photoUrl: firebaseUser.phone,
         phone: firebaseUser.phone,
+        role:firebaseUser.role, // Default role, can be updated later
+      );
+    } else {
+      return User(
+        id: '1',
+        email: 'unknown',
+        name: 'unknown',
+        photoUrl: 'unknown',
+        phone: 'unknown',
         role: UserRole.user, // Default role, can be updated later
       );
     }
   });
 });
-final allUsersProvider = StreamProvider<List<User>>((ref) {
+final allUsersProvider = FutureProvider<List<User>>((ref) {
   final  authService = ref.watch(authServiceProvider);
-  return authService.getAllUsers() as Stream<List<User>>;
+  return authService.getAllUsers();
 });
 
-final currentUserProvider = StateProvider<User?>((ref) {
+final currentUserProvider = StateProvider<User>((ref) {
   final authState = ref.watch(authStateProvider);
   return authState.when(
     data: (user) => user,
-    loading: () => null,
-    error: (_, __) => null,
+    loading: () { 
+    return User(
+        id: '1',
+        email: 'unknown',
+        name: 'unknown',
+        photoUrl: 'unknown',
+        phone: 'unknown',
+        role: UserRole.user, // Default role, can be updated later
+      );  
+    },
+    error: (_, __) =>User(
+        id: '1',
+        email: 'unknown',
+        name: 'unknown',
+        photoUrl: 'unknown',
+        phone: 'unknown',
+        role: UserRole.user, // Default role, can be updated later
+      )
   );
 });
 
 // Check if user has admin rights
 final isAdminProvider = Provider<bool>((ref) {
   final user = ref.watch(currentUserProvider);
-  return user?.role == UserRole.admin;
+  return user.role == UserRole.admin;
 });
 final authNotifierProvider = StateNotifierProvider<AuthNotifier, User?>((ref) {
   final authService = ref.watch(authServiceProvider);

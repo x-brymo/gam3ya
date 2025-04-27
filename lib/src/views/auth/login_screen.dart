@@ -1,10 +1,16 @@
 // screens/auth/login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+<<<<<<< HEAD
+=======
+import 'package:gam3ya/src/constants/routes.dart';
+>>>>>>> 5fb1f7a273d6de661b7a61e84a08607c6b256fc8
 import 'package:gam3ya/src/controllers/auth_provider.dart';
 import 'package:gam3ya/src/widgets/animations/fade_animation.dart';
 import 'package:gam3ya/src/widgets/common/custom_button.dart';
 import 'package:gam3ya/src/widgets/common/custom_text_field.dart';
+
+import '../../constants/SharedPreferences.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -31,15 +37,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
-
+    final roleUser = await PrefsHandler.getString('role');
+    
     try {
-      await ref.read(authNotifierProvider.notifier).login(
-            _emailController.text.trim(),
-            _passwordController.text,
-          );
+      await ref
+          .read(authNotifierProvider.notifier)
+          .login(_emailController.text.trim(), _passwordController.text);
+      if (roleUser == 'admin') {
+        Navigator.pushNamed(context, AppRoutes.adminDashboard);
+      } else {
+        Navigator.pushNamed(context, AppRoutes.home);
+      }
     } catch (e) {
       if (!mounted) return;
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: ${e.toString()}'),
@@ -67,7 +78,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(height: size.height * 0.05),
-                
+
                 // Logo and App name
                 FadeAnimation(
                   duration: const Duration(milliseconds: 800),
@@ -107,9 +118,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: size.height * 0.05),
-                
+
                 // Login Form
                 FadeAnimation(
                   duration: const Duration(milliseconds: 1000),
@@ -119,19 +130,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Login',
-                          style: theme.textTheme.headlineMedium,
-                        ),
+                        Text('Login', style: theme.textTheme.headlineMedium),
                         const SizedBox(height: 8),
                         Text(
                           'Welcome back! Please login to your account',
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                            color: theme.textTheme.bodyMedium?.color
+                                ?.withOpacity(0.7),
                           ),
                         ),
                         const SizedBox(height: 24),
-                        
+
                         // Email Field
                         CustomTextField(
                           controller: _emailController,
@@ -143,14 +152,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
                             }
-                            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                            if (!RegExp(
+                              r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                            ).hasMatch(value)) {
                               return 'Please enter a valid email';
                             }
                             return null;
                           },
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Password Field
                         CustomTextField(
                           controller: _passwordController,
@@ -178,7 +189,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           },
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Forgot Password Link
                         Align(
                           alignment: Alignment.centerRight,
@@ -195,7 +206,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        
+
                         // Login Button
                         CustomButton(
                           text: 'Login',
@@ -203,7 +214,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           onPressed: _login,
                         ),
                         const SizedBox(height: 24),
-                        
+
                         // Sign Up Link
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
