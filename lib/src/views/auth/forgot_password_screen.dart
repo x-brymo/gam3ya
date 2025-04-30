@@ -60,14 +60,17 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Forgot Password'),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Forgot Password'),
+      //   centerTitle: true,
+      //    automaticallyImplyLeading: false,
+      // ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: _resetSent ? _buildSuccessView(theme) : _buildResetForm(theme),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: _resetSent ? _buildSuccessView(theme) : _buildResetForm(theme),
+          ),
         ),
       ),
     );

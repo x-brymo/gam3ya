@@ -8,6 +8,7 @@ import 'package:gam3ya/src/widgets/common/error_widget.dart';
 import 'package:gam3ya/src/widgets/common/loading_indicator.dart';
 import 'package:gam3ya/src/widgets/gam3ya/gam3ya_card.dart';
 
+import '../../constants/routes.dart';
 import '../../models/enum_models.dart';
 
 class Gam3yaListScreen extends ConsumerStatefulWidget {
@@ -242,6 +243,16 @@ class _Gam3yaListScreenState extends ConsumerState<Gam3yaListScreen>
         ],
         bottom: TabBar(
           controller: _tabController,
+          onTap: (index) {
+            // Reset filters when switching tabs
+            ref.read(gam3yaFilterProvider.notifier).state = (
+              query: '',
+              duration: null,
+              size: null,
+            );
+          },
+          indicatorColor: Colors.white,
+          labelColor: Colors.white,
           tabs: const [
             Tab(text: 'All'),
             Tab(text: 'Active'),
@@ -275,7 +286,7 @@ class _Gam3yaListScreenState extends ConsumerState<Gam3yaListScreen>
                       onTap: () {
                         Navigator.pushNamed(
                           context,
-                          '/gam3ya/details',
+                          AppRoutes.gam3yaDetail,
                           arguments: filteredGam3yas[index].id,
                         );
                       },
@@ -294,7 +305,7 @@ class _Gam3yaListScreenState extends ConsumerState<Gam3yaListScreen>
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/gam3ya/create');
+          Navigator.pushNamed(context, AppRoutes.createGam3ya);
         },
         child: const Icon(Icons.add),
       ),

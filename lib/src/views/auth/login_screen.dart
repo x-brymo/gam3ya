@@ -1,10 +1,9 @@
 // screens/auth/login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-<<<<<<< HEAD
-=======
+
 import 'package:gam3ya/src/constants/routes.dart';
->>>>>>> 5fb1f7a273d6de661b7a61e84a08607c6b256fc8
+
 import 'package:gam3ya/src/controllers/auth_provider.dart';
 import 'package:gam3ya/src/widgets/animations/fade_animation.dart';
 import 'package:gam3ya/src/widgets/common/custom_button.dart';

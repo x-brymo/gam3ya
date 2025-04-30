@@ -7,6 +7,7 @@ import 'package:gam3ya/src/widgets/common/error_widget.dart';
 import 'package:gam3ya/src/widgets/common/loading_indicator.dart';
 import 'package:intl/intl.dart';
 
+import '../../constants/routes.dart';
 import '../../controllers/gam3ya_provider.dart';
 import '../../models/enum_models.dart';
 
@@ -263,7 +264,7 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen>
               ),
               const SizedBox(height: 16),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   // View Details Button
                   OutlinedButton.icon(
@@ -272,7 +273,7 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen>
                     onPressed: () {
                       Navigator.pushNamed(
                         context,
-                        '/gam3ya/details',
+                        AppRoutes.gam3yaDetail,
                         arguments: gam3ya.id,
                       );
                     },
@@ -280,7 +281,7 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen>
                   const SizedBox(width: 8),
                   // Status management buttons
                   if (gam3ya.status == Gam3yaStatus.pending)
-                    Row(
+                    Column(
                       children: [
                         ElevatedButton.icon(
                           icon: const Icon(Icons.check),
@@ -344,6 +345,19 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen>
                   ref
                       .read(gam3yasNotifierProvider.notifier)
                       .updateGam3yaStatus(gam3ya.id, Gam3yaStatus.active);
+                      // check if success or no
+                        if (gam3ya.status == Gam3yaStatus.pending) {
+                          ref.read(gam3yasNotifierProvider.notifier).loadAllGam3yas();
+                        }
+                  // Show success message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Gam3ya "${gam3ya.name}" has been approved',
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

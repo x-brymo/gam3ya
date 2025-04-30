@@ -313,11 +313,15 @@ class ProfileScreen extends ConsumerWidget {
                                   TextButton(
                                     onPressed: () async {
                                       ref.read(authServiceProvider).signOut();
+                                      Future.delayed(
+                                        const Duration(seconds: 5),
 
-                                      //Navigator.of(ctx).pop();
-                                      Navigator.of(
-                                        context,
-                                      ).pushReplacementNamed(AppRoutes.login);
+                                      );
+                                        // restart app
+                                        Navigator.of(context).pushNamedAndRemoveUntil(
+                                        AppRoutes.splash,
+                                        (Route<dynamic> route) => false,
+                                        );
                                     },
                                     child: const Text('تسجيل الخروج'),
                                   ),

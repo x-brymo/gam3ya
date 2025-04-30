@@ -192,18 +192,35 @@ final FirebaseService gam3yaServiceProviders = FirebaseService();
     
     state = users.whereType<User>().cast<Gam3ya>().toList();
   }
-  Future<void>updateGam3yaStatus(String gam3yaId, Gam3yaStatus status) async {
-    final gam3ya = await gam3yaServiceProviders.getGam3ya(gam3yaId);
+  Future<void> updateGam3yaStatus(String gam3yaId, Gam3yaStatus status) async {
+  final gam3ya = await gam3yaServiceProviders.getGam3ya(gam3yaId);
+  if (gam3ya != null) return;
+
+  final updatedGam3ya = gam3ya!.copyWith(status: status);
+  await gam3yaServiceProviders.updateGam3ya(gam3yaId, updatedGam3ya);
+
+  state = state.map((g) => g.id == gam3ya.id ? updatedGam3ya : g).toList();
+}
+  Future<void> fetchAvailableGam3yas(int reputationScore) async {
+    final allGam3yas = await gam3yaServiceProviders.getAllGam3yas();
+    state = allGam3yas.where((gam3ya) => gam3ya.minRequiredReputation <= reputationScore).toList();
+  }
+  Future<void> fetchSearchGam3yas(String query) async {
+    final allGam3yas = await gam3yaServiceProviders.getAllGam3yas();
     
-    if (gam3ya == null) return;
+    if (query.isEmpty) {
+      state = allGam3yas;
+      return;
+    }
     
-    gam3ya.status = status;
-    await gam3yaServiceProviders.updateGam3ya(gam3yaId, gam3ya);
-    
-    state = state.map((g) => g.id == gam3ya.id ? gam3ya : g).toList();
+    state = allGam3yas.where((gam3ya) => gam3ya.name.toLowerCase().contains(query.toLowerCase())).toList();
   }
   // singleGam3yaProvider
   Future<void> fetchSingleGam3ya(String gam3yaId) async {
+    if (gam3yaId.isEmpty) {
+      throw ArgumentError('gam3yaId cannot be an empty string');
+    }
+    
     final gam3ya = await gam3yaServiceProviders.getGam3ya(gam3yaId);
     
     if (gam3ya == null) return;

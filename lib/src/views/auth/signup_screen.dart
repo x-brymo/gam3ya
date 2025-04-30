@@ -87,10 +87,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Account'),
-        centerTitle: true,
-      ),
+     
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

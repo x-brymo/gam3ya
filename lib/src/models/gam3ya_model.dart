@@ -33,7 +33,7 @@ class Gam3ya {
   final DateTime startDate;
 
   @HiveField(7)
-  late final Gam3yaStatus status;
+  final Gam3yaStatus status;
 
   @HiveField(8)
   final Gam3yaDuration duration;
