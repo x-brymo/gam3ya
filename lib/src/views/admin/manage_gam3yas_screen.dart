@@ -14,10 +14,12 @@ class ManageGam3yasScreen extends ConsumerStatefulWidget {
   const ManageGam3yasScreen({super.key});
 
   @override
-  ConsumerState<ManageGam3yasScreen> createState() => _ManageGam3yasScreenState();
+  ConsumerState<ManageGam3yasScreen> createState() =>
+      _ManageGam3yasScreenState();
 }
 
-class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen> with SingleTickerProviderStateMixin {
+class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
@@ -27,7 +29,7 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen> with 
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    
+
     // Load gam3yas when screen initializes
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(gam3yasNotifierProvider.notifier).loadAllGam3yas();
@@ -77,7 +79,7 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen> with 
 
   Widget _buildFilterChip(Gam3yaStatus status) {
     final isSelected = _filterStatus == status;
-    
+
     return FilterChip(
       label: Text(_getStatusDisplayName(status)),
       selected: isSelected,
@@ -104,20 +106,19 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen> with 
         decoration: InputDecoration(
           hintText: 'Search Gam3yas...',
           prefixIcon: const Icon(Icons.search),
-          suffixIcon: _searchQuery.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    setState(() {
-                      _searchController.clear();
-                      _searchQuery = '';
-                    });
-                  },
-                )
-              : null,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          suffixIcon:
+              _searchQuery.isNotEmpty
+                  ? IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      setState(() {
+                        _searchController.clear();
+                        _searchQuery = '';
+                      });
+                    },
+                  )
+                  : null,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         ),
         onChanged: (value) {
           setState(() {
@@ -134,7 +135,10 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen> with 
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
         children: [
-          const Text('Filter by status:', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text(
+            'Filter by status:',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           const SizedBox(width: 8),
           _buildFilterChip(Gam3yaStatus.pending),
           const SizedBox(width: 8),
@@ -164,13 +168,15 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen> with 
   List<Gam3ya> _filterGam3yas(List<Gam3ya> gam3yas) {
     return gam3yas.where((gam3ya) {
       // Filter by search query
-      final matchesSearch = _searchQuery.isEmpty ||
+      final matchesSearch =
+          _searchQuery.isEmpty ||
           gam3ya.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
           gam3ya.description.toLowerCase().contains(_searchQuery.toLowerCase());
-      
+
       // Filter by status
-      final matchesStatus = _filterStatus == null || gam3ya.status == _filterStatus;
-      
+      final matchesStatus =
+          _filterStatus == null || gam3ya.status == _filterStatus;
+
       return matchesSearch && matchesStatus;
     }).toList();
   }
@@ -200,7 +206,10 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen> with 
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: _getStatusColor(gam3ya.status).withOpacity(0.2),
                       borderRadius: BorderRadius.circular(12),
@@ -220,9 +229,7 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen> with 
                 gam3ya.description,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Colors.grey[700],
-                ),
+                style: TextStyle(color: Colors.grey[700]),
               ),
               const SizedBox(height: 16),
               Row(
@@ -232,15 +239,23 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen> with 
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Amount: ${gam3ya.amount.toStringAsFixed(2)} EGP'),
-                      Text('Members: ${gam3ya.members.length}/${gam3ya.totalMembers}'),
-                      Text('Start Date: ${DateFormat('dd/MM/yyyy').format(gam3ya.startDate)}'),
+                      Text(
+                        'Members: ${gam3ya.members.length}/${gam3ya.totalMembers}',
+                      ),
+                      Text(
+                        'Start Date: ${DateFormat('dd/MM/yyyy').format(gam3ya.startDate)}',
+                      ),
                     ],
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Duration: ${gam3ya.duration.toString().split('.').last}'),
-                      Text('Access: ${gam3ya.access.toString().split('.').last}'),
+                      Text(
+                        'Duration: ${gam3ya.duration.toString().split('.').last}',
+                      ),
+                      Text(
+                        'Access: ${gam3ya.access.toString().split('.').last}',
+                      ),
                       Text('Min Reputation: ${gam3ya.minRequiredReputation}'),
                     ],
                   ),
@@ -314,151 +329,158 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen> with 
   void _showApprovalDialog(Gam3ya gam3ya) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Approve Gam3ya'),
-        content: Text('Are you sure you want to approve "${gam3ya.name}"?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Approve Gam3ya'),
+            content: Text('Are you sure you want to approve "${gam3ya.name}"?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                onPressed: () {
+                  ref
+                      .read(gam3yasNotifierProvider.notifier)
+                      .updateGam3yaStatus(gam3ya.id, Gam3yaStatus.active);
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Gam3ya "${gam3ya.name}" has been approved',
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                },
+                child: const Text('Approve'),
+              ),
+            ],
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-            ),
-            onPressed: () {
-              ref.read(gam3yasNotifierProvider.notifier).updateGam3yaStatus(
-                gam3ya.id,
-                Gam3yaStatus.active,
-              );
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Gam3ya "${gam3ya.name}" has been approved'),
-                  backgroundColor: Colors.green,
-                ),
-              );
-            },
-            child: const Text('Approve'),
-          ),
-        ],
-      ),
     );
   }
 
   void _showRejectionDialog(Gam3ya gam3ya) {
     final reasonController = TextEditingController();
-    
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Reject Gam3ya'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Are you sure you want to reject "${gam3ya.name}"?'),
-            const SizedBox(height: 16),
-            TextField(
-              controller: reasonController,
-              decoration: const InputDecoration(
-                labelText: 'Reason for rejection',
-                hintText: 'Provide a reason for rejection',
-              ),
-              maxLines: 3,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-            ),
-            onPressed: () {
-              ref.read(gam3yasNotifierProvider.notifier).updateGam3yaStatus(
-                gam3ya.id,
-                Gam3yaStatus.rejected,
-                //reason: reasonController.text,
-              );
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Gam3ya "${gam3ya.name}" has been rejected'),
-                  backgroundColor: Colors.red,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Reject Gam3ya'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Are you sure you want to reject "${gam3ya.name}"?'),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: reasonController,
+                  decoration: const InputDecoration(
+                    labelText: 'Reason for rejection',
+                    hintText: 'Provide a reason for rejection',
+                  ),
+                  maxLines: 3,
                 ),
-              );
-            },
-            child: const Text('Reject'),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                onPressed: () {
+                  ref
+                      .read(gam3yasNotifierProvider.notifier)
+                      .updateGam3yaStatus(
+                        gam3ya.id,
+                        Gam3yaStatus.rejected,
+                        //reason: reasonController.text,
+                      );
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Gam3ya "${gam3ya.name}" has been rejected',
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                },
+                child: const Text('Reject'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
   void _showCancellationDialog(Gam3ya gam3ya) {
     final reasonController = TextEditingController();
-    
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Cancel Gam3ya'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Are you sure you want to cancel "${gam3ya.name}"?'),
-            const SizedBox(height: 16),
-            TextField(
-              controller: reasonController,
-              decoration: const InputDecoration(
-                labelText: 'Reason for cancellation',
-                hintText: 'Provide a reason for cancellation',
-              ),
-              maxLines: 3,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Back'),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
-            ),
-            onPressed: () {
-              ref.read(gam3yasNotifierProvider.notifier).updateGam3yaStatus(
-                gam3ya.id,
-                Gam3yaStatus.cancelled,
-               // reason: reasonController.text,
-              );
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Gam3ya "${gam3ya.name}" has been cancelled'),
-                  backgroundColor: Colors.orange,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Cancel Gam3ya'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Are you sure you want to cancel "${gam3ya.name}"?'),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: reasonController,
+                  decoration: const InputDecoration(
+                    labelText: 'Reason for cancellation',
+                    hintText: 'Provide a reason for cancellation',
+                  ),
+                  maxLines: 3,
                 ),
-              );
-            },
-            child: const Text('Cancel Gam3ya'),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Back'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+                onPressed: () {
+                  ref
+                      .read(gam3yasNotifierProvider.notifier)
+                      .updateGam3yaStatus(
+                        gam3ya.id,
+                        Gam3yaStatus.cancelled,
+                        // reason: reasonController.text,
+                      );
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Gam3ya "${gam3ya.name}" has been cancelled',
+                      ),
+                      backgroundColor: Colors.orange,
+                    ),
+                  );
+                },
+                child: const Text('Cancel Gam3ya'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final gam3yasState = ref.watch(gam3yasProvider);
-    
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manage Gam3yas'),
+        automaticallyImplyLeading: false,
         bottom: TabBar(
           controller: _tabController,
+          labelStyle: TextStyle(color: Colors.white),
           tabs: const [
             Tab(text: 'All'),
             Tab(text: 'Pending'),
@@ -476,21 +498,27 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen> with 
               data: (gam3yas) {
                 // Filter gam3yas based on tab, search query and filter
                 List<Gam3ya> filteredGam3yas;
-                
+
                 switch (_tabController.index) {
                   case 1: // Pending tab
-                    filteredGam3yas = gam3yas.where((g) => g.status == Gam3yaStatus.pending).toList();
+                    filteredGam3yas =
+                        gam3yas
+                            .where((g) => g.status == Gam3yaStatus.pending)
+                            .toList();
                     break;
                   case 2: // Active tab
-                    filteredGam3yas = gam3yas.where((g) => g.status == Gam3yaStatus.active).toList();
+                    filteredGam3yas =
+                        gam3yas
+                            .where((g) => g.status == Gam3yaStatus.active)
+                            .toList();
                     break;
                   default: // All tab
                     filteredGam3yas = gam3yas;
                 }
-                
+
                 // Apply additional filters
                 filteredGam3yas = _filterGam3yas(filteredGam3yas);
-                
+
                 if (filteredGam3yas.isEmpty) {
                   return const Center(
                     child: Text(
@@ -499,24 +527,30 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen> with 
                     ),
                   );
                 }
-                
+
                 return TabBarView(
                   controller: _tabController,
                   children: List.generate(3, (index) {
                     // We'll use the same list but filter differently based on tab
                     List<Gam3ya> tabFilteredGam3yas;
-                    
+
                     switch (index) {
                       case 1: // Pending tab
-                        tabFilteredGam3yas = filteredGam3yas.where((g) => g.status == Gam3yaStatus.pending).toList();
+                        tabFilteredGam3yas =
+                            filteredGam3yas
+                                .where((g) => g.status == Gam3yaStatus.pending)
+                                .toList();
                         break;
                       case 2: // Active tab
-                        tabFilteredGam3yas = filteredGam3yas.where((g) => g.status == Gam3yaStatus.active).toList();
+                        tabFilteredGam3yas =
+                            filteredGam3yas
+                                .where((g) => g.status == Gam3yaStatus.active)
+                                .toList();
                         break;
                       default: // All tab
                         tabFilteredGam3yas = filteredGam3yas;
                     }
-                    
+
                     if (tabFilteredGam3yas.isEmpty) {
                       return const Center(
                         child: Text(
@@ -525,21 +559,29 @@ class _ManageGam3yasScreenState extends ConsumerState<ManageGam3yasScreen> with 
                         ),
                       );
                     }
-                    
+
                     return ListView.builder(
                       itemCount: tabFilteredGam3yas.length,
-                      itemBuilder: (context, i) => _buildGam3yaCard(tabFilteredGam3yas[i]),
+                      itemBuilder:
+                          (context, i) =>
+                              _buildGam3yaCard(tabFilteredGam3yas[i]),
                     );
                   }),
                 );
               },
-              loading: () => const Center(
-                child: LoadingIndicator(message: 'Loading Gam3yas...'),
-              ),
-              error: (error, stackTrace) => ErrorDisplayWidget(
-                message: error.toString(),
-                onRetry: () => ref.read(gam3yasNotifierProvider.notifier).loadAllGam3yas(),
-              ),
+              loading:
+                  () => const Center(
+                    child: LoadingIndicator(message: 'Loading Gam3yas...'),
+                  ),
+              error:
+                  (error, stackTrace) => ErrorDisplayWidget(
+                    message: error.toString(),
+                    onRetry:
+                        () =>
+                            ref
+                                .read(gam3yasNotifierProvider.notifier)
+                                .loadAllGam3yas(),
+                  ),
             ),
           ),
         ],

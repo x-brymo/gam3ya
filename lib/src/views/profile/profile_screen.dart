@@ -24,9 +24,6 @@ class ProfileScreen extends ConsumerWidget {
         data: (user) {
           return SafeArea(
             child: FadeAnimation(
-              delay: Duration(seconds: 3),
-              duration: Duration(seconds: 5),
-
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: Column(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gam3ya/src/constants/routes.dart';
 import 'package:gam3ya/src/controllers/user_provider.dart';
+import 'package:gam3ya/src/views/admin/admin_dashboard.dart';
 
 import 'package:gam3ya/src/widgets/animations/fade_animation.dart';
 
@@ -53,7 +54,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     data: (userData) {
       final isAdmin = userData.role.name == 'admin';
 
-      return Scaffold(
+      return isAdmin ? AdminDashboard(): Scaffold(
         body: SafeArea(
           child: PageView(
             controller: _pageController,
